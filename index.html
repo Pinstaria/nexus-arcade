@@ -2,2316 +2,1751 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Nexus Arcade</title>
+  <title>Nexus Arcade – Expanded UI Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --bg: #050617;
-      --bg-alt: #080a1f;
-      --accent: #ff5ef7;
-      --accent2: #4ef0ff;
-      --card-bg: #111325;
-      --card-border: #272b4b;
-      --text-main: #f4f7ff;
-      --text-muted: #9aa0d2;
-      --danger: #ff5e7a;
-      --success: #4ef09e;
-      --warning: #ffc857;
-      --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.5);
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-pill: 999px;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
       background: radial-gradient(circle at top, #1d1f44, #050617 55%, #000 100%);
-      color: var(--text-main);
+      color: #f4f7ff;
       min-height: 100vh;
-      padding: 32px 16px 40px;
-      display: flex;
-      justify-content: center;
     }
 
-    .app {
-      width: 100%;
-      max-width: 1200px;
-    }
+    .hidden { display: none !important; }
+    .muted { color: #9aa0d2; font-size: 0.85rem; }
+    .small { font-size: 0.75rem; }
 
-    header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .title-block {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 18px;
-      background: conic-gradient(
-        from 180deg,
-        var(--accent),
-        var(--accent2),
-        #ffb347,
-        var(--accent)
-      );
-      box-shadow: 0 0 40px rgba(255, 94, 247, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 900;
-      font-size: 20px;
+    button {
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: none;
+      background: linear-gradient(135deg, #ff5ef7, #4ef0ff);
       color: #050617;
-    }
-
-    h1 {
-      font-size: 28px;
-      letter-spacing: 0.12em;
+      font-size: 0.8rem;
       text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
     }
 
-    .subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
+    input, select {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #272b4b;
+      background: #050617;
+      color: #f4f7ff;
+      font-size: 0.8rem;
     }
 
     .pill {
-      border-radius: var(--radius-pill);
-      padding: 8px 14px;
-      font-size: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 94, 247, 0.12),
-        rgba(78, 240, 255, 0.05)
-      );
-      color: var(--text-muted);
-    }
-
-    .pill strong {
-      color: var(--accent2);
-      font-size: 13px;
-    }
-
-    .btn {
-      border-radius: var(--radius-pill);
-      padding: 8px 16px;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid #272b4b;
+      background: #050617;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #050617;
-      box-shadow: var(--shadow-strong);
-      display: inline-flex;
+      letter-spacing: 0.12em;
+    }
+
+    /* Auth */
+
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
     }
 
-    .btn span {
-      font-size: 11px;
-      opacity: 0.8;
+    .auth-card {
+      background: #050617;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      padding: 20px;
+      width: 320px;
     }
 
-    main {
-      background: linear-gradient(145deg, #050617, #111325);
-      border-radius: 26px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: var(--shadow-strong);
-      padding: 18px 18px 22px;
-      position: relative;
+    .auth-card h1 {
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+    }
+
+    .tabs {
+      display: flex;
+      margin: 10px 0;
+      border-radius: 999px;
       overflow: hidden;
+      border: 1px solid #272b4b;
     }
 
-    main::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      opacity: 0.35;
-      background:
-        radial-gradient(circle at 10% 0%, rgba(255, 94, 247, 0.18) 0, transparent 40%),
-        radial-gradient(circle at 90% 0%, rgba(78, 240, 255, 0.18) 0, transparent 40%);
-      pointer-events: none;
+    .tab {
+      flex: 1;
+      padding: 6px 0;
+      border: none;
+      background: #111325;
+      color: #9aa0d2;
+      font-size: 0.8rem;
+      cursor: pointer;
     }
 
-    .main-inner {
-      position: relative;
-      z-index: 1;
+    .tab.active {
+      background: #4ef0ff;
+      color: #050617;
+      font-weight: 600;
     }
 
-    .top-row {
+    .form {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .form.active { display: flex; }
+
+    .auth-error {
+      min-height: 14px;
+      color: #ff5e7a;
+      font-size: 0.75rem;
+    }
+
+    /* App layout */
+
+    #app { padding: 10px; }
+
+    .app-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .stats {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .stat-card {
-      background: rgba(7, 9, 28, 0.9);
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 12px;
-      min-width: 120px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 4px;
-    }
-
-    .stat-value {
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .stat-value span {
-      font-size: 11px;
-      color: var(--accent2);
-      margin-left: 4px;
-    }
-
-    .filter-bar {
-      display: flex;
+      align-items: baseline;
+      margin-bottom: 8px;
       gap: 8px;
-      flex-wrap: wrap;
+    }
+
+    .app-header h1 { font-size: 1.2rem; }
+
+    .header-right {
+      display: flex;
+      gap: 6px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
-    .filter-chip {
-      border-radius: var(--radius-pill);
-      padding: 6px 12px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(9, 10, 40, 0.95);
-      color: var(--text-muted);
-    }
-
-    .filter-chip.active {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: radial-gradient(circle at top left, rgba(255, 94, 247, 0.2), transparent 60%);
-    }
-
-    .grid {
-      margin-top: 10px;
+    .layout {
       display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: 2.2fr 1.3fr;
+      gap: 8px;
     }
 
-    .game-card {
-      position: relative;
-      border-radius: var(--radius-lg);
-      background: radial-gradient(circle at top left, #22254a, #0a0c23);
-      border: 1px solid var(--card-border);
-      padding: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease,
-        background 0.18s ease;
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
     }
 
-    .game-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.55);
-      border-color: rgba(255, 255, 255, 0.5);
-      background: radial-gradient(circle at top left, #2f3468, #050617);
+    .panel {
+      background: #050617cc;
+      border-radius: 18px;
+      border: 1px solid #272b4b;
+      padding: 8px;
     }
 
-    .game-tag {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 4px 9px;
-      font-size: 10px;
-      border-radius: var(--radius-pill);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-    }
+    .panel h2 { font-size: 0.9rem; margin-bottom: 4px; }
 
-    .game-tag.reaction {
-      border-color: var(--accent2);
-      color: var(--accent2);
-    }
+    /* Left: Games */
 
-    .game-tag.memory {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .game-tag.survival {
-      border-color: var(--danger);
-      color: var(--danger);
-    }
-
-    .game-tag.logic {
-      border-color: var(--success);
-      color: var(--success);
-    }
-
-    .thumb {
-      height: 90px;
-      border-radius: 12px;
-      background: radial-gradient(circle at 10% 0, rgba(255, 255, 255, 0.12), transparent 55%),
-        radial-gradient(circle at 90% 100%, rgba(0, 0, 0, 0.6), transparent 57%),
-        linear-gradient(135deg, #151633, #050617);
-      overflow: hidden;
-      margin-bottom: 10px;
-      position: relative;
-    }
-
-    .thumb-canvas {
-      width: 100%;
-      height: 100%;
-      background:
-        repeating-linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.05),
-          rgba(255, 255, 255, 0.05) 2px,
-          transparent 2px,
-          transparent 6px
-        );
-      position: absolute;
-      inset: 0;
-      opacity: 0.7;
-    }
-
-    .thumb-orbit {
-      position: absolute;
-      width: 60%;
-      height: 60%;
-      border-radius: 999px;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
-      top: 20%;
-      left: 20%;
-    }
-
-    .thumb-orbit::after {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--accent2);
-      box-shadow: 0 0 12px rgba(78, 240, 255, 0.85);
-      top: -5px;
-      right: 8px;
-    }
-
-    .thumb-pulse {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      border: 2px solid rgba(255, 94, 247, 0.6);
-      left: 16px;
-      bottom: 16px;
-    }
-
-    .thumb-pulse::after {
-      content: "";
-      position: absolute;
-      inset: 3px;
-      border-radius: inherit;
-      background: radial-gradient(circle, rgba(255, 94, 247, 0.6), transparent);
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .card-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-      min-height: 30px;
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 6px;
       margin-bottom: 6px;
     }
 
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-    }
-
-    .pill-small {
-      border-radius: var(--radius-pill);
-      padding: 3px 7px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .difficulty {
-      display: flex;
-      gap: 2px;
-      align-items: center;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .dot.on {
-      background: var(--accent2);
-      box-shadow: 0 0 6px rgba(78, 240, 255, 0.9);
-    }
-
-    .dot.hard {
-      background: var(--danger);
-      box-shadow: 0 0 6px rgba(255, 94, 122, 0.9);
-    }
-
-    footer {
-      margin-top: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      color: var(--text-muted);
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    footer span strong {
-      color: var(--accent2);
-    }
-
-    .ticker {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .ticker-pill {
-      border-radius: var(--radius-pill);
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(7, 9, 28, 0.88);
-    }
-
-    /* Modal / game container */
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 12px;
-      z-index: 50;
-    }
-
-    .overlay.active {
-      display: flex;
-    }
-
-    .game-shell {
-      width: 100%;
-      max-width: 960px;
-      background: radial-gradient(circle at top left, #272b5e, #050617);
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
-      padding: 14px 16px 16px;
-      position: relative;
-      color: #f8f8ff;
-    }
-
-    .game-shell-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .game-shell-header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .game-shell-title {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .game-shell-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .game-shell-controls {
-      display: flex;
+    .game-tile {
+      background: #111325;
+      border-radius: 14px;
+      padding: 8px;
+      text-align: left;
+      cursor: pointer;
+      border: 1px solid #272b4b;
+      font-size: 0.75rem;
+      display: grid;
+      grid-template-columns: 26px 1fr;
       gap: 6px;
       align-items: center;
     }
 
-    .ghost-btn {
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(8, 10, 30, 0.9);
-      padding: 5px 10px;
-      font-size: 11px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-    }
-
-    .ghost-btn.primary {
-      border-color: var(--accent2);
-      color: var(--accent2);
-    }
-
-    .ghost-btn.danger {
-      border-color: var(--danger);
-      color: var(--danger);
-    }
-
-    .game-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    @media (max-width: 800px) {
-      .game-layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .canvas-wrap {
-      background: radial-gradient(circle at top, #151633, #050617);
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 8px;
-      position: relative;
-    }
-
-    canvas {
-      display: block;
+    .game-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
       background: #050617;
-      border-radius: 14px;
-      width: 100%;
-      height: 260px;
-      image-rendering: pixelated;
-    }
-
-    @media (max-width: 600px) {
-      canvas {
-        height: 220px;
-      }
-    }
-
-    .info-panel {
-      background: rgba(5, 6, 23, 0.95);
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 10px 12px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 11px;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
     }
 
-    .info-row {
+    .game-tile h3 {
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+
+    .game-tile p {
+      color: #9aa0d2;
+      font-size: 0.7rem;
+    }
+
+    .game-tags {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .game-tag {
+      border-radius: 999px;
+      border: 1px solid #272b4b;
+      padding: 1px 5px;
+      font-size: 0.65rem;
+      color: #9aa0d2;
+    }
+
+    .game-tile.active {
+      border-color: #4ef0ff;
+      box-shadow: 0 0 8px rgba(78,240,255,0.7);
+    }
+
+    #game-canvas {
+      display: block;
+      width: 100%;
+      border-radius: 12px;
+      background: #050617;
+      margin-top: 4px;
+    }
+
+    #game-info {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: #9aa0d2;
+    }
+
+    /* Right: tabbed panels */
+
+    .right-tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid #272b4b;
+      margin-bottom: 4px;
+    }
+
+    .right-tab-btn {
+      flex: 1;
+      padding: 4px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #9aa0d2;
+      font-size: 0.75rem;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .right-tab-btn.active {
+      background: #111325;
+      color: #4ef0ff;
+      border-bottom: 2px solid #4ef0ff;
+    }
+
+    .right-tab {
+      display: none;
+      margin-top: 2px;
+    }
+
+    .right-tab.active { display: block; }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      margin: 2px 0;
+    }
+
+    .inventory-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 4px;
+    }
+
+    .color-card {
+      border-radius: 10px;
+      border: 1px solid #272b4b;
+      padding: 4px;
+      width: 86px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      background: #050617;
+    }
+
+    .color-card.selected {
+      border-color: #4ef0ff;
+      box-shadow: 0 0 8px rgba(78,240,255,0.8);
+    }
+
+    .color-swatch {
+      height: 18px;
+      border-radius: 6px;
+      margin-bottom: 2px;
+    }
+
+    .rarity-badge {
+      display: inline-block;
+      padding: 0 5px;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      border: 1px solid;
+      margin-top: 1px;
+    }
+
+    /* Rarity colors */
+    .rarity-Common { border-color:#616161; color:#bdbdbd; }
+    .rarity-Uncommon { border-color:#43a047; color:#a5d6a7; }
+    .rarity-Rare { border-color:#1e88e5; color:#90caf9; }
+    .rarity-Epic { border-color:#8e24aa; color:#e1bee7; }
+    .rarity-Legendary { border-color:#ffb300; color:#ffecb3; }
+    .rarity-Mythical { border-color:#ec407a; color:#f8bbd0; }
+    .rarity-Exotic { border-color:#00bfa5; color:#b2dfdb; }
+    .rarity-Celestial { border-color:#5c6bc0; color:#c5cae9; }
+    .rarity-Godly { border-color:#f4511e; color:#ffccbc; }
+    .rarity-Impossible { border-color:#9e9d24; color:#e6ee9c; }
+    .rarity-Zenith { border-color:#ff6f00; color:#ffe082; }
+    .rarity-Singularity { border-color:#546e7a; color:#cfd8dc; }
+    .rarity-Paradox { border-color:#ab47bc; color:#e1bee7; }
+    .rarity-Omniversal { border-color:#26c6da; color:#b2ebf2; }
+
+    .list-box,
+    .recipes-list,
+    .leaderboard,
+    .index-box {
+      max-height: 120px;
+      overflow-y: auto;
+      border-radius: 10px;
+      border: 1px solid #272b4b;
+      padding: 4px;
+      font-size: 0.7rem;
+    }
+
+    .lb-entry {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      margin-bottom: 2px;
     }
 
-    .info-label {
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 10px;
+    .index-entry {
+      margin-bottom: 2px;
     }
 
-    .info-value {
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .info-value.accent {
-      color: var(--accent2);
-    }
-
-    .info-value.danger {
-      color: var(--danger);
-    }
-
-    .info-body {
-      margin-top: 2px;
-      line-height: 1.5;
-      color: var(--text-muted);
-    }
-
-    .kbd {
-      padding: 2px 5px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .chip {
       border-radius: 999px;
-      width: 26px;
-      height: 26px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      background: rgba(5, 6, 23, 0.9);
-      font-size: 13px;
-      color: var(--text-muted);
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      border: 1px solid #272b4b;
+      background: #050617;
     }
 
-    .close-btn:hover {
-      background: rgba(255, 94, 122, 0.15);
-      color: var(--danger);
+    .profile-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+      font-size: 0.75rem;
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div class="title-block">
-        <div class="logo">NX</div>
-        <div>
-          <h1>Nexus Arcade</h1>
-          <div class="subtitle">20 ultra‑replayable micro‑games · all in one neon hub</div>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="pill">
-          Daily combo:
-          <strong id="daily-combo">Reaction · Memory · Survival</strong>
-        </div>
-        <button class="btn" id="random-game-btn">
-          Play random
-          <span>Reroll with space</span>
-        </button>
-      </div>
-    </header>
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <h1>Nexus Arcade</h1>
+      <p class="muted small">Single‑file edition · local accounts only</p>
 
-    <main>
-      <div class="main-inner">
-        <div class="top-row">
-          <div class="stats">
-            <div class="stat-card">
-              <div class="stat-label">Games</div>
-              <div class="stat-value" id="stat-games">20 <span>modes</span></div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">Best streak</div>
-              <div class="stat-value" id="stat-streak">0 <span>wins</span></div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">Time played</div>
-              <div class="stat-value" id="stat-time">0:00 <span>session</span></div>
-            </div>
-          </div>
-          <div class="filter-bar">
-            <button class="filter-chip active" data-filter="all">All</button>
-            <button class="filter-chip" data-filter="reaction">Reaction</button>
-            <button class="filter-chip" data-filter="memory">Memory</button>
-            <button class="filter-chip" data-filter="survival">Survival</button>
-            <button class="filter-chip" data-filter="logic">Logic</button>
-          </div>
-        </div>
-
-        <div class="grid" id="game-grid">
-          <!-- Cards injected by JS -->
-        </div>
-
-        <footer>
-          <span>Built for <strong>quick sessions</strong> and long marathons. All scores are client‑side only.</span>
-          <div class="ticker">
-            <div class="ticker-pill">Tip: press <span class="kbd">space</span> to hop between games.</div>
-            <div class="ticker-pill">Most games: mouse or arrow keys only.</div>
-          </div>
-        </footer>
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Login</button>
+        <button class="tab" data-tab="register">Register</button>
       </div>
-    </main>
-  </div>
 
-  <!-- Modal / game container -->
-  <div class="overlay" id="overlay">
-    <div class="game-shell">
-      <button class="close-btn" id="close-overlay">&times;</button>
-      <div class="game-shell-header">
-        <div class="game-shell-header-left">
-          <div class="game-shell-title" id="game-title">Game title</div>
-          <div class="game-shell-sub" id="game-sub">Game subtitle / mode</div>
-        </div>
-        <div class="game-shell-controls">
-          <button class="ghost-btn danger" id="quit-btn">Quit</button>
-          <button class="ghost-btn primary" id="restart-btn">Restart</button>
-        </div>
-      </div>
-      <div class="game-layout">
-        <div class="canvas-wrap">
-          <canvas id="game-canvas" width="480" height="270"></canvas>
-        </div>
-        <aside class="info-panel">
-          <div class="info-row">
-            <span class="info-label">Mode</span>
-            <span class="info-value" id="info-mode">Reaction</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">High score</span>
-            <span class="info-value accent" id="info-high">0</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Last run</span>
-            <span class="info-value danger" id="info-last">No runs yet</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Controls</span>
-            <span class="info-value" id="info-controls"></span>
-          </div>
-          <div class="info-body" id="info-body">
-            Hover over cards in the hub to see quick descriptions. Each mode tweaks difficulty, speed or rules to stay fresh.
-          </div>
-        </aside>
-      </div>
+      <form id="login-form" class="form active">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <div id="login-error" class="auth-error"></div>
+      </form>
+
+      <form id="register-form" class="form">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Register</button>
+        <div id="register-error" class="auth-error"></div>
+      </form>
+
+      <p class="muted small" style="margin-top:6px;">
+        Accounts, inventory, and leaderboards are stored in <strong>this browser only</strong> using localStorage.
+      </p>
     </div>
   </div>
 
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <header class="app-header">
+      <div>
+        <h1>Nexus Arcade</h1>
+        <div id="welcome" class="muted small"></div>
+      </div>
+      <div class="header-right">
+        <span id="weather-pill" class="pill">Weather: Clear</span>
+        <span id="currency-pill" class="pill">Credits: 0</span>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: GAMES -->
+      <section class="panel">
+        <h2>Games & Systems</h2>
+        <div class="games-grid">
+          <button class="game-tile" data-game="packian">
+            <div class="game-icon">P</div>
+            <div>
+              <h3>Packian</h3>
+              <p>Packs, rarities, mutations, crafting, index.</p>
+              <div class="game-tags">
+                <span class="game-tag">Economy</span>
+                <span class="game-tag">Collecting</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="emberforge">
+            <div class="game-icon">E</div>
+            <div>
+              <h3>Emberforge</h3>
+              <p>Fuel the forge without collapsing stability.</p>
+              <div class="game-tags">
+                <span class="game-tag">Risk</span>
+                <span class="game-tag">Timing</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="bloomcraft">
+            <div class="game-icon">B</div>
+            <div>
+              <h3>Bloomcraft</h3>
+              <p>Grow and mutate color‑plants over time.</p>
+              <div class="game-tags">
+                <span class="game-tag">Idle</span>
+                <span class="game-tag">Weather</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="voltline">
+            <div class="game-icon">V</div>
+            <div>
+              <h3>Voltline</h3>
+              <p>Click nodes, build chain, avoid overload.</p>
+              <div class="game-tags">
+                <span class="game-tag">Chain</span>
+                <span class="game-tag">Precision</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="cryoshift">
+            <div class="game-icon">C</div>
+            <div>
+              <h3>Cryoshift</h3>
+              <p>Freeze/thaw shards, balance value vs stability.</p>
+              <div class="game-tags">
+                <span class="game-tag">Balance</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="riftweave">
+            <div class="game-icon">R</div>
+            <div>
+              <h3>Riftweave</h3>
+              <p>Weave colored threads at rising tension.</p>
+              <div class="game-tags">
+                <span class="game-tag">Score</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="phaseRunner">
+            <div class="game-icon">↕</div>
+            <div>
+              <h3>Phase Runner</h3>
+              <p>Switch lanes, dodge blocks, survive longest.</p>
+              <div class="game-tags">
+                <span class="game-tag">Reflex</span>
+                <span class="game-tag">Survival</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="precisionPulse">
+            <div class="game-icon">◎</div>
+            <div>
+              <h3>Precision Pulse</h3>
+              <p>Hit pulses as close to perfect as possible.</p>
+              <div class="game-tags">
+                <span class="game-tag">Timing</span>
+                <span class="game-tag">Accuracy</span>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <canvas id="game-canvas" width="480" height="270"></canvas>
+        <div id="game-info" class="muted small">
+          Select a game above to begin. In some games, use Space or clicks as indicated.
+        </div>
+      </section>
+
+      <!-- RIGHT: TABBED SYSTEMS -->
+      <section class="panel">
+        <div class="right-tabs">
+          <button class="right-tab-btn active" data-rtab="packian-panel">Packian</button>
+          <button class="right-tab-btn" data-rtab="systems-panel">Systems</button>
+          <button class="right-tab-btn" data-rtab="leaderboard-panel">Leaderboards</button>
+          <button class="right-tab-btn" data-rtab="profile-panel">Profile</button>
+        </div>
+
+        <!-- PACKIAN PANEL -->
+        <div id="packian-panel" class="right-tab active">
+          <div class="row">
+            <span class="muted small">Weather: <strong id="weather-label">Clear</strong></span>
+            <span class="muted small">Index entries: <strong id="index-count">0</strong></span>
+          </div>
+
+          <div class="row">
+            <button id="btn-open-pack">Open Pack (20)</button>
+            <button id="btn-mutate">Mutate Selected</button>
+            <button id="btn-sell">Sell Selected</button>
+          </div>
+
+          <div class="inventory-grid" id="inventory"></div>
+
+          <div class="row" style="margin-top:4px;">
+            <input id="recipe-name" type="text" placeholder="Recipe name" />
+            <select id="recipe-visibility">
+              <option value="private">Private</option>
+              <option value="public">Public</option>
+            </select>
+            <button id="btn-save-recipe">Save recipe from selected</button>
+          </div>
+
+          <p class="muted small" style="margin-top:4px;">Your recipes:</p>
+          <div class="recipes-list" id="recipes"></div>
+
+          <p class="muted small" style="margin-top:4px;">Packidex (index of discovered color+rarity combos):</p>
+          <div class="index-box" id="index-box"></div>
+        </div>
+
+        <!-- SYSTEMS PANEL -->
+        <div id="systems-panel" class="right-tab">
+          <h3 class="small">Systems Snapshot</h3>
+          <div class="row">
+            <span class="muted small">Emberforge heat: <strong id="emberforge-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Bloomcraft best bloom: <strong id="bloomcraft-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Voltline top chain: <strong id="voltline-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Cryoshift stability: <strong id="cryoshift-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Riftweave score: <strong id="riftweave-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Phase Runner distance: <strong id="phaseRunner-last">–</strong></span>
+          </div>
+          <div class="row">
+            <span class="muted small">Precision Pulse accuracy: <strong id="precisionPulse-last">–</strong></span>
+          </div>
+
+          <h3 class="small" style="margin-top:6px;">Event Log</h3>
+          <div id="log-box" class="list-box small muted">
+            Welcome to Nexus Arcade. All data is local to this browser.
+          </div>
+        </div>
+
+        <!-- LEADERBOARD PANEL -->
+        <div id="leaderboard-panel" class="right-tab">
+          <h3 class="small">Leaderboards</h3>
+          <div class="row">
+            <select id="lb-game-select">
+              <option value="packian">Packian value streak</option>
+              <option value="emberforge">Emberforge heat</option>
+              <option value="bloomcraft">Bloomcraft mutation</option>
+              <option value="voltline">Voltline chain</option>
+              <option value="cryoshift">Cryoshift stability</option>
+              <option value="riftweave">Riftweave score</option>
+              <option value="phaseRunner">Phase Runner distance</option>
+              <option value="precisionPulse">Precision Pulse accuracy</option>
+            </select>
+            <button id="lb-refresh">Refresh</button>
+          </div>
+          <div id="leaderboard" class="leaderboard"></div>
+        </div>
+
+        <!-- PROFILE PANEL -->
+        <div id="profile-panel" class="right-tab">
+          <h3 class="small">Profile overview</h3>
+          <div id="profile-stats"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <script>
-    // --------- Game hub data ---------
-    const games = [
-      {
-        id: "reaction-1",
-        name: "Photon Reflex",
-        subtitle: "Classic reaction test",
-        description: "Wait for the arena to flash, then click as fast as you can. Consistency beats luck.",
-        tag: "reaction",
-        difficulty: 2,
-        variant: "reaction",
-        params: { minDelay: 800, maxDelay: 2600 }
-      },
-      {
-        id: "reaction-2",
-        name: "Quantum Reflex",
-        subtitle: "Fast‑twitch challenge",
-        description: "The arena might fake you out with dark flashes. React only to bright cyan.",
-        tag: "reaction",
-        difficulty: 3,
-        variant: "reaction-bait",
-        params: { minDelay: 600, maxDelay: 2100, baitChance: 0.35 }
-      },
-      {
-        id: "reaction-3",
-        name: "Tunnel Reflex",
-        subtitle: "Multi‑round speed ladder",
-        description: "Survive 5 increasingly aggressive rounds. Average time is what counts.",
-        tag: "reaction",
-        difficulty: 4,
-        variant: "reaction-multi",
-        params: { rounds: 5, minDelay: 700, maxDelay: 2500 }
-      },
-      {
-        id: "memory-1",
-        name: "Neon Pairs",
-        subtitle: "4×4 memory grid",
-        description: "Flip panels two at a time. Remember positions and clear the grid in as few moves as possible.",
-        tag: "memory",
-        difficulty: 2,
-        variant: "memory",
-        params: { rows: 4, cols: 4 }
-      },
-      {
-        id: "memory-2",
-        name: "Echo Matrix",
-        subtitle: "5×4 hard mode",
-        description: "More tiles, more distraction. Can you still keep a perfect streak?",
-        tag: "memory",
-        difficulty: 3,
-        variant: "memory",
-        params: { rows: 4, cols: 5 }
-      },
-      {
-        id: "memory-3",
-        name: "Ghost Sequence",
-        subtitle: "Simon‑style pattern",
-        description: "Watch the orbiting lights then reproduce the sequence by clicking the quadrants.",
-        tag: "memory",
-        difficulty: 3,
-        variant: "simon",
-        params: { pads: 4 }
-      },
-      {
-        id: "memory-4",
-        name: "Nova Sequence",
-        subtitle: "Fast pattern build",
-        description: "Patterns grow quickly. One mistake resets the run, so stay locked in.",
-        tag: "memory",
-        difficulty: 4,
-        variant: "simon",
-        params: { pads: 4, fast: true }
-      },
-      {
-        id: "survival-1",
-        name: "Void Runner",
-        subtitle: "Dodge‑the‑blocks",
-        description: "Use arrow keys to slide left and right. How long can you last in the falling‑block storm?",
-        tag: "survival",
-        difficulty: 2,
-        variant: "dodger",
-        params: { speed: 2 }
-      },
-      {
-        id: "survival-2",
-        name: "Meteor Drift",
-        subtitle: "Faster dodging",
-        description: "Same rules, more chaos. You’ll need predictive movement rather than last‑second dodges.",
-        tag: "survival",
-        difficulty: 3,
-        variant: "dodger",
-        params: { speed: 3.3 }
-      },
-      {
-        id: "survival-3",
-        name: "Singularity Field",
-        subtitle: "Tiny hitbox, dense rain",
-        description: "You’re smaller but so are the gaps. Micro‑dodges make all the difference.",
-        tag: "survival",
-        difficulty: 4,
-        variant: "dodger",
-        params: { speed: 3.8, tinyPlayer: true }
-      },
-      {
-        id: "logic-1",
-        name: "Chrono Tap",
-        subtitle: "1‑to‑16 grid",
-        description: "Click numbers in ascending order as quickly as possible. Misclicks cost time.",
-        tag: "logic",
-        difficulty: 2,
-        variant: "number-grid",
-        params: { size: 4 }
-      },
-      {
-        id: "logic-2",
-        name: "Chrono Tap XL",
-        subtitle: "1‑to‑25 grid",
-        description: "Same rules, bigger grid. Find your scanning rhythm.",
-        tag: "logic",
-        difficulty: 3,
-        variant: "number-grid",
-        params: { size: 5 }
-      },
-      {
-        id: "logic-3",
-        name: "Flux Type",
-        subtitle: "Typing sprint",
-        description: "Type the falling codes before they hit the floor. Accuracy multiplies score.",
-        tag: "logic",
-        difficulty: 3,
-        variant: "typing",
-        params: { spawnRate: 1800 }
-      },
-      {
-        id: "logic-4",
-        name: "Flux Type Turbo",
-        subtitle: "Harder typing sprint",
-        description: "Shorter words but brutal spawn speed. Don’t let your buffer overflow.",
-        tag: "logic",
-        difficulty: 4,
-        variant: "typing",
-        params: { spawnRate: 1100 }
-      },
-      {
-        id: "reaction-4",
-        name: "Pulse Catcher",
-        subtitle: "Target clicker",
-        description: "Click glowing orbs before they fade. Misses hurt your combo.",
-        tag: "reaction",
-        difficulty: 2,
-        variant: "target-click",
-        params: { lifetime: 1100 }
-      },
-      {
-        id: "reaction-5",
-        name: "Pulse Storm",
-        subtitle: "Dense target field",
-        description: "Multiple orbs are active at once. Decide which one is worth your next click.",
-        tag: "reaction",
-        difficulty: 3,
-        variant: "target-click",
-        params: { lifetime: 900, multi: true }
-      },
-      {
-        id: "survival-4",
-        name: "Grid Snake",
-        subtitle: "Classic snake loop",
-        description: "Arrow keys to move, no walls, no mercy. How big can you get without biting yourself?",
-        tag: "survival",
-        difficulty: 3,
-        variant: "snake",
-        params: { speed: 120 }
-      },
-      {
-        id: "survival-5",
-        name: "Edge Snake",
-        subtitle: "Walls are lethal",
-        description: "This time the border is deadly. Gaps feel a lot tighter now.",
-        tag: "survival",
-        difficulty: 4,
-        variant: "snake",
-        params: { speed: 110, walls: true }
-      },
-      {
-        id: "logic-5",
-        name: "Phase Shift",
-        subtitle: "Mini maze",
-        description: "Guide the cube to the goal while the maze pulses. Time your runs between wall shifts.",
-        tag: "logic",
-        difficulty: 2,
-        variant: "maze",
-        params: { size: 9 }
-      },
-      {
-        id: "logic-6",
-        name: "Phase Shift Plus",
-        subtitle: "Compact, tricky maze",
-        description: "Shorter distance, nastier layout. You’ll need to rethink your routes.",
-        tag: "logic",
-        difficulty: 3,
-        variant: "maze",
-        params: { size: 11 }
-      }
-    ];
+    // ---------- Local storage ----------
+    const STORAGE_KEY = "nexusArcadeState_v2";
 
-    // --------- Hub rendering ---------
-    const grid = document.getElementById("game-grid");
-
-    function createDifficultyDots(level) {
-      const dots = [];
-      for (let i = 1; i <= 4; i++) {
-        const on = i <= level;
-        dots.push(
-          `<div class="dot ${on ? "on" : ""} ${on && level >= 4 ? "hard" : ""}"></div>`
-        );
-      }
-      return dots.join("");
-    }
-
-    function renderCards(filter = "all") {
-      grid.innerHTML = "";
-      for (const game of games) {
-        if (filter !== "all" && game.tag !== filter) continue;
-        const card = document.createElement("article");
-        card.className = "game-card";
-        card.dataset.gameId = game.id;
-        card.innerHTML = `
-          <div class="game-tag ${game.tag}">${game.tag}</div>
-          <div class="thumb">
-            <div class="thumb-canvas"></div>
-            <div class="thumb-orbit"></div>
-            <div class="thumb-pulse"></div>
-          </div>
-          <div class="card-title">${game.name}</div>
-          <div class="card-desc">${game.description}</div>
-          <div class="card-footer">
-            <div class="pill-small">${game.subtitle}</div>
-            <div class="difficulty">${createDifficultyDots(game.difficulty)}</div>
-          </div>
-        `;
-        grid.appendChild(card);
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { users: {}, currentUser: null, leaderboards: {}, publicRecipes: [] };
+        return JSON.parse(raw);
+      } catch {
+        return { users: {}, currentUser: null, leaderboards: {}, publicRecipes: [] };
       }
     }
 
-    renderCards();
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
 
-    // Filters
-    const filterButtons = document.querySelectorAll(".filter-chip");
-    filterButtons.forEach(btn => {
+    let state = loadState();
+
+    function log(msg) {
+      const box = document.getElementById("log-box");
+      const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      box.innerHTML = `[${time}] ${msg}<br>` + box.innerHTML;
+    }
+
+    // ---------- Auth ----------
+    const authScreen = document.getElementById("auth-screen");
+    const app = document.getElementById("app");
+    const welcomeEl = document.getElementById("welcome");
+    const currencyPill = document.getElementById("currency-pill");
+    const weatherPill = document.getElementById("weather-pill");
+
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    const loginError = document.getElementById("login-error");
+    const registerError = document.getElementById("register-error");
+
+    document.querySelectorAll(".tab").forEach(btn => {
       btn.addEventListener("click", () => {
-        filterButtons.forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        renderCards(btn.dataset.filter);
+        const t = btn.dataset.tab;
+        document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
+        document.getElementById(t + "-form").classList.add("active");
       });
     });
 
-    // --------- Stats / timers ---------
-    let bestStreak = 0;
-    let currentStreak = 0;
-    let sessionSeconds = 0;
-    setInterval(() => {
-      sessionSeconds++;
-      const minutes = Math.floor(sessionSeconds / 60);
-      const seconds = sessionSeconds % 60;
-      document.getElementById("stat-time").textContent =
-        `${minutes}:${seconds.toString().padStart(2, "0")} session`;
-    }, 1000);
-
-    const statStreakEl = document.getElementById("stat-streak");
-    function updateStreak(result) {
-      if (result === "win") {
-        currentStreak++;
-        if (currentStreak > bestStreak) bestStreak = currentStreak;
-      } else if (result === "loss") {
-        currentStreak = 0;
-      }
-      statStreakEl.textContent = `${bestStreak} wins`;
+    function hash(pw) {
+      let h = 0;
+      for (let i = 0; i < pw.length; i++) h = (h * 31 + pw.charCodeAt(i)) >>> 0;
+      return h.toString(16);
     }
 
-    // --------- Modal / game engine wiring ---------
-    const overlay = document.getElementById("overlay");
-    const closeOverlay = document.getElementById("close-overlay");
-    const quitBtn = document.getElementById("quit-btn");
-    const restartBtn = document.getElementById("restart-btn");
+    function ensureUser(username) {
+      if (!state.users[username]) {
+        state.users[username] = {
+          username,
+          passwordHash: null,
+          currency: 250,
+          inventory: [],
+          recipes: [],
+          packIndex: {}, // key: baseId:rarity
+          lastScores: {
+            packian: null,
+            emberforge: null,
+            bloomcraft: null,
+            voltline: null,
+            cryoshift: null,
+            riftweave: null,
+            phaseRunner: null,
+            precisionPulse: null
+          }
+        };
+      }
+      return state.users[username];
+    }
+
+    function setCurrentUser(username) {
+      state.currentUser = username;
+      saveState();
+      const u = ensureUser(username);
+      authScreen.classList.add("hidden");
+      app.classList.remove("hidden");
+      welcomeEl.textContent = `Logged in as ${u.username}`;
+      updateCurrency();
+      refreshPackianUI();
+      refreshIndexBox();
+      refreshLastScoreLabels();
+      refreshProfilePanel();
+      log(`Logged in as ${u.username}.`);
+      // Start default game
+      startGame("packian");
+    }
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      loginError.textContent = "";
+      const fd = new FormData(loginForm);
+      const username = fd.get("username").trim();
+      const password = fd.get("password");
+      if (!username || !password) {
+        loginError.textContent = "Enter username and password.";
+        return;
+      }
+      const u = state.users[username];
+      if (!u || !u.passwordHash || u.passwordHash !== hash(password)) {
+        loginError.textContent = "Invalid credentials.";
+        return;
+      }
+      setCurrentUser(username);
+    });
+
+    registerForm.addEventListener("submit", e => {
+      e.preventDefault();
+      registerError.textContent = "";
+      const fd = new FormData(registerForm);
+      const username = fd.get("username").trim();
+      const password = fd.get("password");
+      if (!username || !password) {
+        registerError.textContent = "Enter username and password.";
+        return;
+      }
+      if (state.users[username]) {
+        registerError.textContent = "Username already exists.";
+        return;
+      }
+      const u = ensureUser(username);
+      u.passwordHash = hash(password);
+      saveState();
+      setCurrentUser(username);
+    });
+
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      state.currentUser = null;
+      saveState();
+      app.classList.add("hidden");
+      authScreen.classList.remove("hidden");
+      log("Logged out.");
+    });
+
+    function getUser() {
+      if (!state.currentUser) return null;
+      return ensureUser(state.currentUser);
+    }
+
+    function updateCurrency() {
+      const u = getUser();
+      currencyPill.textContent = `Credits: ${u ? u.currency : 0}`;
+    }
+
+    // Auto-login if previous user exists
+    if (state.currentUser && state.users[state.currentUser]) {
+      setCurrentUser(state.currentUser);
+    }
+
+    // ---------- Right-side tabs ----------
+    document.querySelectorAll(".right-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".right-tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".right-tab").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.rtab).classList.add("active");
+      });
+    });
+
+    // ---------- Game engine ----------
     const canvas = document.getElementById("game-canvas");
     const ctx = canvas.getContext("2d");
-
-    const gameTitleEl = document.getElementById("game-title");
-    const gameSubEl = document.getElementById("game-sub");
-    const infoModeEl = document.getElementById("info-mode");
-    const infoHighEl = document.getElementById("info-high");
-    const infoLastEl = document.getElementById("info-last");
-    const infoControlsEl = document.getElementById("info-controls");
-    const infoBodyEl = document.getElementById("info-body");
+    const gameInfo = document.getElementById("game-info");
+    const gameTiles = document.querySelectorAll(".game-tile");
 
     let currentGame = null;
-    let currentVariant = null;
-    let currentHighscores = {};
     let loopHandle = null;
-    let lastTimestamp = 0;
+    let lastTime = 0;
 
-    function stopGameLoop() {
-      if (loopHandle) {
-        cancelAnimationFrame(loopHandle);
-        loopHandle = null;
-      }
-      if (currentVariant && currentVariant.cleanup) currentVariant.cleanup();
-      currentVariant = null;
+    function startGame(gameId) {
+      gameTiles.forEach(t => t.classList.remove("active"));
+      const tile = document.querySelector(`.game-tile[data-game="${gameId}"]`);
+      if (tile) tile.classList.add("active");
+
+      if (loopHandle) cancelAnimationFrame(loopHandle);
       currentGame = null;
-    }
 
-    function startGameLoop(variant) {
-      currentVariant = variant;
-      lastTimestamp = performance.now();
-      function loop(timestamp) {
-        const dt = timestamp - lastTimestamp;
-        lastTimestamp = timestamp;
-        if (currentVariant && currentVariant.update) {
-          currentVariant.update(dt);
-        }
-        if (currentVariant && currentVariant.render) {
-          currentVariant.render();
-        }
+      if (gameId === "packian") {
+        gameInfo.textContent = "Packian: open packs, mutate colors, craft recipes, fill the Packidex.";
+        currentGame = createPackianVisualizer();
+      } else if (gameId === "emberforge") {
+        gameInfo.textContent = "Emberforge: press Space to add fuel. Stop before stability hits 0.";
+        currentGame = createEmberforge();
+      } else if (gameId === "bloomcraft") {
+        gameInfo.textContent = "Bloomcraft: blooms grow/mutate automatically based on weather.";
+        currentGame = createBloomcraft();
+      } else if (gameId === "voltline") {
+        gameInfo.textContent = "Voltline: click nodes to add charge and extend the chain.";
+        currentGame = createVoltline();
+      } else if (gameId === "cryoshift") {
+        gameInfo.textContent = "Cryoshift: press Space to toggle Frozen/Thawing.";
+        currentGame = createCryoshift();
+      } else if (gameId === "riftweave") {
+        gameInfo.textContent = "Riftweave: click canvas to add tension and threads.";
+        currentGame = createRiftweave();
+      } else if (gameId === "phaseRunner") {
+        gameInfo.textContent = "Phase Runner: use W/S or Up/Down to change lanes and avoid blocks.";
+        currentGame = createPhaseRunner();
+      } else if (gameId === "precisionPulse") {
+        gameInfo.textContent = "Precision Pulse: press Space as close as possible to pulse center.";
+        currentGame = createPrecisionPulse();
+      }
+
+      lastTime = performance.now();
+      function loop(ts) {
+        const dt = ts - lastTime;
+        lastTime = ts;
+        if (currentGame && currentGame.update) currentGame.update(dt);
+        if (currentGame && currentGame.render) currentGame.render();
         loopHandle = requestAnimationFrame(loop);
       }
       loopHandle = requestAnimationFrame(loop);
     }
 
-    function openGame(game) {
-      stopGameLoop();
-      currentGame = game;
-      overlay.classList.add("active");
-      gameTitleEl.textContent = game.name;
-      gameSubEl.textContent = game.subtitle;
-      infoModeEl.textContent =
-        game.tag.charAt(0).toUpperCase() + game.tag.slice(1);
-      infoHighEl.textContent = currentHighscores[game.id] ?? 0;
-      infoLastEl.textContent = "No runs yet";
-      const controls = variantControls[game.variant] || "Mouse or keys.";
-      infoControlsEl.innerHTML = controls;
-      infoBodyEl.textContent = game.description;
+    gameTiles.forEach(tile => {
+      tile.addEventListener("click", () => startGame(tile.dataset.game));
+    });
 
-      const initVariant = variantInitializers[game.variant];
-      if (initVariant) {
-        const variantInstance = initVariant(game.params, runResult => {
-          const prevHigh = currentHighscores[game.id] ?? 0;
-          if (runResult.score != null && runResult.score > prevHigh) {
-            currentHighscores[game.id] = runResult.score;
-            infoHighEl.textContent = runResult.score;
-          }
-          infoLastEl.textContent =
-            runResult.label || `Score: ${runResult.score ?? 0}`;
-          updateStreak(runResult.outcome || "loss");
+    // ---------- Leaderboards ----------
+    const lbSelect = document.getElementById("lb-game-select");
+    const lbRefresh = document.getElementById("lb-refresh");
+    const lbBox = document.getElementById("leaderboard");
+
+    function submitScore(gameId, score) {
+      const u = getUser();
+      if (!u) return;
+      if (!state.leaderboards[gameId]) state.leaderboards[gameId] = [];
+      const list = state.leaderboards[gameId];
+      list.push({ username: u.username, score, ts: Date.now() });
+      list.sort((a, b) => b.score - a.score);
+      if (list.length > 20) list.length = 20;
+      saveState();
+      u.lastScores[gameId] = score;
+      saveState();
+      refreshLastScoreLabels();
+      refreshProfilePanel();
+    }
+
+    function renderLeaderboard(gameId) {
+      const list = state.leaderboards[gameId] || [];
+      lbBox.innerHTML = "";
+      if (!list.length) {
+        lbBox.textContent = "No scores yet.";
+        return;
+      }
+      list.forEach((entry, i) => {
+        const div = document.createElement("div");
+        div.className = "lb-entry";
+        const date = new Date(entry.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        div.innerHTML = `<span>${i + 1}. ${entry.username}</span><span>${entry.score} <span class="muted small">(${date})</span></span>`;
+        lbBox.appendChild(div);
+      });
+    }
+
+    lbRefresh.addEventListener("click", () => renderLeaderboard(lbSelect.value));
+
+    function refreshLastScoreLabels() {
+      const u = getUser();
+      if (!u) return;
+      const ls = u.lastScores;
+      const ids = [
+        "emberforge", "bloomcraft", "voltline", "cryoshift",
+        "riftweave", "phaseRunner", "precisionPulse"
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id + "-last");
+        if (el) el.textContent = ls[id] ?? "–";
+      });
+    }
+
+    function refreshProfilePanel() {
+      const u = getUser();
+      const box = document.getElementById("profile-stats");
+      if (!u) {
+        box.innerHTML = "";
+        return;
+      }
+      const totalItems = u.inventory.length;
+      const distinctIndex = Object.keys(u.packIndex).length;
+      const gamesPlayed = Object.values(u.lastScores).filter(v => v !== null).length;
+      box.innerHTML = `
+        <div class="profile-stat"><span>Total credits</span><span>${u.currency}</span></div>
+        <div class="profile-stat"><span>Items owned</span><span>${totalItems}</span></div>
+        <div class="profile-stat"><span>Packidex entries</span><span>${distinctIndex}</span></div>
+        <div class="profile-stat"><span>Games with scores</span><span>${gamesPlayed}</span></div>
+      `;
+    }
+
+    // ---------- Packian data ----------
+    const rarities = [
+      { name: "Common", weight: 55, mult: 1 },
+      { name: "Uncommon", weight: 20, mult: 1.5 },
+      { name: "Rare", weight: 10, mult: 2 },
+      { name: "Epic", weight: 6, mult: 3 },
+      { name: "Legendary", weight: 4, mult: 5 },
+      { name: "Mythical", weight: 2, mult: 8 },
+      { name: "Exotic", weight: 1, mult: 12 },
+      { name: "Celestial", weight: 0.5, mult: 18 },
+      { name: "Godly", weight: 0.2, mult: 25 },
+      { name: "Impossible", weight: 0.05, mult: 40 },
+      { name: "Zenith", weight: 0.01, mult: 100 },
+      { name: "Singularity", weight: 0.005, mult: 200 },
+      { name: "Paradox", weight: 0.001, mult: 500 },
+      { name: "Omniversal", weight: 0.0005, mult: 1000 }
+    ];
+
+    const baseColors = [
+      { id: "crimson", hex: "#ff1744", basePrice: 30 },
+      { id: "azure", hex: "#2979ff", basePrice: 30 },
+      { id: "emerald", hex: "#00e676", basePrice: 35 },
+      { id: "violet", hex: "#d500f9", basePrice: 40 },
+      { id: "amber", hex: "#ffca28", basePrice: 25 },
+      { id: "obsidian", hex: "#000000", basePrice: 70 },
+      { id: "ghost", hex: "#f5f5f5", basePrice: 50 },
+      { id: "coral", hex: "#ff7f50", basePrice: 28 },
+      { id: "mint", hex: "#98ff98", basePrice: 26 },
+      { id: "indigo", hex: "#3f51b5", basePrice: 32 },
+      { id: "teal", hex: "#00897b", basePrice: 34 },
+      { id: "rose", hex: "#ff4081", basePrice: 31 }
+    ];
+
+    const weathers = ["Clear", "Stormy", "Solar", "Void", "Aurora", "Nebula"];
+    let weatherIndex = 0;
+    let weatherTimer = 0;
+
+    function getCurrentWeather() {
+      return weathers[weatherIndex];
+    }
+
+    function mutateChance(weather) {
+      switch (weather) {
+        case "Clear": return 0.05;
+        case "Stormy": return 0.15;
+        case "Solar": return 0.25;
+        case "Void": return 0.4;
+        case "Aurora": return 0.3;
+        case "Nebula": return 0.5;
+        default: return 0.1;
+      }
+    }
+
+    function randomRarity() {
+      const totalWeight = rarities.reduce((s, r) => s + r.weight, 0);
+      let roll = Math.random() * totalWeight;
+      for (const r of rarities) {
+        if (roll < r.weight) return r;
+        roll -= r.weight;
+      }
+      return rarities[0];
+    }
+
+    function generateColorToken(ownerName) {
+      const bc = baseColors[Math.floor(Math.random() * baseColors.length)];
+      const r = randomRarity();
+      const id = `${bc.id}-${r.name}-${Math.random().toString(16).slice(2, 8)}`;
+      const value = Math.round(bc.basePrice * r.mult);
+      return {
+        id,
+        baseId: bc.id,
+        rarity: r.name,
+        hex: bc.hex,
+        value,
+        mutated: false,
+        owner: ownerName,
+        createdAt: Date.now()
+      };
+    }
+
+    function mutateColorToken(token, weather) {
+      const chance = mutateChance(weather);
+      if (Math.random() <= chance) {
+        token.mutated = true;
+        token.value = Math.round(token.value * (1.5 + Math.random() * 1.5));
+        return true;
+      }
+      return false;
+    }
+
+    // ---------- Packian UI ----------
+    const weatherLabel = document.getElementById("weather-label");
+    const indexCountEl = document.getElementById("index-count");
+    const inventoryEl = document.getElementById("inventory");
+    const indexBoxEl = document.getElementById("index-box");
+    const btnOpenPack = document.getElementById("btn-open-pack");
+    const btnMutate = document.getElementById("btn-mutate");
+    const btnSell = document.getElementById("btn-sell");
+    const recipeNameInput = document.getElementById("recipe-name");
+    const recipeVisSelect = document.getElementById("recipe-visibility");
+    const btnSaveRecipe = document.getElementById("btn-save-recipe");
+    const recipesEl = document.getElementById("recipes");
+
+    let selectedIds = new Set();
+
+    function refreshPackianUI() {
+      const u = getUser();
+      if (!u) return;
+      const w = getCurrentWeather();
+      weatherLabel.textContent = w;
+      weatherPill.textContent = `Weather: ${w}`;
+      indexCountEl.textContent = Object.keys(u.packIndex).length;
+
+      inventoryEl.innerHTML = "";
+      for (const token of u.inventory) {
+        const div = document.createElement("div");
+        div.className = "color-card";
+        if (selectedIds.has(token.id)) div.classList.add("selected");
+        const rarityClass = "rarity-" + token.rarity.replace(/\s/g, "");
+        div.innerHTML = `
+          <div class="color-swatch" style="background:${token.hex}"></div>
+          <div>${token.baseId}</div>
+          <div><span class="rarity-badge ${rarityClass}">${token.rarity}${token.mutated ? "*" : ""}</span></div>
+          <div>${token.value}</div>
+        `;
+        div.addEventListener("click", () => {
+          if (selectedIds.has(token.id)) selectedIds.delete(token.id);
+          else selectedIds.add(token.id);
+          refreshPackianUI();
         });
-        startGameLoop(variantInstance);
+        inventoryEl.appendChild(div);
       }
+
+      recipesEl.innerHTML = "";
+      for (const r of u.recipes) {
+        const div = document.createElement("div");
+        div.textContent = `${r.name} [${r.visibility}] – ${r.components.join(", ")}`;
+        recipesEl.appendChild(div);
+      }
+
+      updateCurrency();
     }
 
-    function closeGame() {
-      stopGameLoop();
-      overlay.classList.remove("active");
+    function refreshIndexBox() {
+      const u = getUser();
+      if (!u) return;
+      indexBoxEl.innerHTML = "";
+      const keys = Object.keys(u.packIndex).sort();
+      if (!keys.length) {
+        indexBoxEl.textContent = "No entries yet. Open packs to discover colors.";
+        return;
+      }
+      keys.forEach(key => {
+        const entry = u.packIndex[key];
+        const rarityClass = "rarity-" + entry.rarity.replace(/\s/g, "");
+        const div = document.createElement("div");
+        div.className = "index-entry";
+        div.innerHTML = `
+          <span>${entry.baseId}</span>
+          <span class="rarity-badge ${rarityClass}">${entry.rarity}</span>
+          <span class="muted small">x${entry.discovered}</span>
+        `;
+        indexBoxEl.appendChild(div);
+      });
     }
 
-    closeOverlay.addEventListener("click", closeGame);
-    quitBtn.addEventListener("click", closeGame);
-    restartBtn.addEventListener("click", () => {
-      if (currentGame) openGame(currentGame);
+    btnOpenPack.addEventListener("click", () => {
+      const u = getUser();
+      if (!u) return;
+      const cost = 20;
+      if (u.currency < cost) {
+        log("Not enough credits to open a pack.");
+        return;
+      }
+      u.currency -= cost;
+      const packSize = 4;
+      const newTokens = [];
+      for (let i = 0; i < packSize; i++) {
+        const t = generateColorToken(u.username);
+        newTokens.push(t);
+        u.inventory.push(t);
+        updatePackIndex(u, t);
+      }
+      log(`Opened a pack and obtained ${packSize} colors.`);
+      selectedIds.clear();
+      saveState();
+      refreshPackianUI();
+      refreshIndexBox();
+      const value = newTokens.reduce((s, t) => s + t.value, 0);
+      submitScore("packian", value);
     });
 
-    // Card click -> open game
-    grid.addEventListener("click", e => {
-      const card = e.target.closest(".game-card");
-      if (!card) return;
-      const id = card.dataset.gameId;
-      const game = games.find(g => g.id === id);
-      if (game) openGame(game);
+    btnMutate.addEventListener("click", () => {
+      const u = getUser();
+      if (!u) return;
+      const ids = Array.from(selectedIds);
+      if (!ids.length) {
+        log("Select colors to mutate.");
+        return;
+      }
+      const weather = getCurrentWeather();
+      let hits = 0;
+      for (const id of ids) {
+        const token = u.inventory.find(t => t.id === id);
+        if (!token) continue;
+        if (mutateColorToken(token, weather)) hits++;
+        updatePackIndex(u, token);
+      }
+      log(`Mutated ${ids.length} colors under ${weather}. Successful mutations: ${hits}.`);
+      saveState();
+      refreshPackianUI();
+      refreshIndexBox();
     });
 
-    // Random game
-    const randomBtn = document.getElementById("random-game-btn");
-    function pickRandomGame() {
-      return games[Math.floor(Math.random() * games.length)];
+    btnSell.addEventListener("click", () => {
+      const u = getUser();
+      if (!u) return;
+      const ids = Array.from(selectedIds);
+      if (!ids.length) {
+        log("Select colors to sell.");
+        return;
+      }
+      let gain = 0;
+      u.inventory = u.inventory.filter(token => {
+        if (ids.includes(token.id)) {
+          gain += token.value;
+          return false;
+        }
+        return true;
+      });
+      u.currency += gain;
+      log(`Sold ${ids.length} colors for ${gain} credits.`);
+      selectedIds.clear();
+      saveState();
+      refreshPackianUI();
+      refreshIndexBox();
+      submitScore("packian", gain);
+    });
+
+    function updatePackIndex(user, token) {
+      const key = `${token.baseId}:${token.rarity}`;
+      if (!user.packIndex[key]) {
+        user.packIndex[key] = {
+          baseId: token.baseId,
+          rarity: token.rarity,
+          discovered: 0,
+          firstAt: Date.now()
+        };
+      }
+      user.packIndex[key].discovered++;
     }
-    randomBtn.addEventListener("click", () => {
-      openGame(pickRandomGame());
-    });
 
-    // Spacebar -> random
-    window.addEventListener("keydown", e => {
-      if (e.code === "Space" && !e.repeat) {
-        e.preventDefault();
-        if (overlay.classList.contains("active")) {
-          openGame(pickRandomGame());
-        } else {
-          openGame(pickRandomGame());
-        }
+    btnSaveRecipe.addEventListener("click", () => {
+      const u = getUser();
+      if (!u) return;
+      const ids = Array.from(selectedIds);
+      if (ids.length < 2) {
+        log("Select at least 2 colors to define a recipe.");
+        return;
       }
-      if (e.code === "Escape") {
-        if (overlay.classList.contains("active")) {
-          closeGame();
-        }
-      }
-    });
-
-    // --------- Variant implementations ---------
-    const variantControls = {
-      "reaction": "Wait until the arena turns <strong>bright cyan</strong>, then <strong>click anywhere</strong> as fast as possible.",
-      "reaction-bait": "Ignore dark flashes. Click only when the arena glows <strong>pure cyan</strong>.",
-      "reaction-multi": "Play 5 rounds back‑to‑back. Wait for the cyan flash and click quickly each round.",
-      "memory": "Click tiles to reveal symbols. Match them in pairs with as few misses as possible.",
-      "simon": "Watch the pad sequence, then repeat it by clicking the colored quadrants.",
-      "dodger": "Use <span class='kbd'>←</span> <span class='kbd'>→</span> to dodge falling blocks. One hit ends the run.",
-      "number-grid": "Click numbers in order starting at 1 as fast as you can.",
-      "typing": "Type the codes shown above the lane before they hit the floor. Press <span class='kbd'>enter</span> to submit.",
-      "target-click": "Click glowing orbs before they disappear. Misses reduce your combo multiplier.",
-      "snake": "Use arrow keys to guide the snake to food. Don’t hit yourself (or walls in Edge mode).",
-      "maze": "Use arrow keys to reach the goal square. Some walls pulse in and out—time your movement."
-    };
-
-    const variantInitializers = {};
-
-    // --- 1: Reaction basic ---
-    variantInitializers["reaction"] = (params, onResult) => {
-      const minDelay = params.minDelay ?? 800;
-      const maxDelay = params.maxDelay ?? 2200;
-      let state = "waiting"; // waiting -> armed -> result
-      let startTime = 0;
-      let triggerTime = performance.now() + (minDelay + Math.random() * (maxDelay - minDelay));
-      let lastTime = performance.now();
-      let resultText = "";
-
-      function reset() {
-        state = "waiting";
-        resultText = "";
-        lastTime = performance.now();
-        triggerTime = lastTime + (minDelay + Math.random() * (maxDelay - minDelay));
-      }
-
-      canvas.onclick = () => {
-        const now = performance.now();
-        if (state === "waiting") {
-          // clicked too early
-          resultText = "Too early!";
-          onResult({ score: 0, label: "Too early", outcome: "loss" });
-          reset();
-        } else if (state === "armed") {
-          const reaction = Math.round(now - startTime);
-          resultText = reaction + " ms";
-          onResult({ score: Math.max(1, 1000 - reaction), label: reaction + " ms", outcome: "win" });
-          reset();
-        }
+      const name = recipeNameInput.value.trim() || "Untitled";
+      const vis = recipeVisSelect.value;
+      const components = ids
+        .map(id => u.inventory.find(t => t.id === id))
+        .filter(Boolean)
+        .map(t => t.baseId);
+      const recipe = {
+        id: "r-" + Math.random().toString(16).slice(2, 8),
+        name,
+        components,
+        visibility: vis
       };
-
-      function update() {
-        const now = performance.now();
-        if (state === "waiting" && now >= triggerTime) {
-          state = "armed";
-          startTime = now;
-        }
+      u.recipes.push(recipe);
+      if (vis === "public") {
+        state.publicRecipes.push({ creator: u.username, name, components });
       }
+      log(`Saved recipe "${name}" (${vis}).`);
+      saveState();
+      refreshPackianUI();
+    });
 
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        const now = performance.now();
-        const armed = state === "armed";
-
-        const progress = state === "waiting"
-          ? Math.max(0, Math.min(1, (triggerTime - now) / (maxDelay - minDelay)))
-          : 0;
-
-        const bgColor = armed ? "#0ff" : `rgb(${10 + 30 * progress}, ${10 + 50 * progress}, ${40 + 120 * (1 - progress)})`;
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.fillStyle = "rgba(0,0,0,0.35)";
-        for (let x = 0; x < w; x += 20) {
-          ctx.fillRect(x, 0, 2, h);
-        }
-
-        ctx.fillStyle = armed ? "#020418" : "#c9e4ff";
-        ctx.font = "20px system-ui";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        const mainText = armed ? "CLICK!" : "Wait for cyan, then click";
-        ctx.fillText(mainText, w / 2, h / 2);
-
-        ctx.font = "14px system-ui";
-        ctx.fillStyle = "#ffffffcc";
-        if (resultText) {
-          ctx.fillText("Last: " + resultText, w / 2, h * 0.7);
-        }
+    // ---------- Packian visualizer ----------
+    function createPackianVisualizer() {
+      const particles = [];
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.06,
+          vy: (Math.random() - 0.5) * 0.06,
+          r: 2 + Math.random() * 4,
+          color: `hsl(${Math.random() * 360},80%,60%)`
+        });
       }
-
-      return { update, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 2: Reaction with baits ---
-    variantInitializers["reaction-bait"] = (params, onResult) => {
-      const minDelay = params.minDelay ?? 600;
-      const maxDelay = params.maxDelay ?? 2100;
-      const baitChance = params.baitChance ?? 0.3;
-      let state = "waiting";
-      let flashColor = "#0ff";
-      let triggerTime = performance.now() + minDelay + Math.random() * (maxDelay - minDelay);
-      let startTime = 0;
-      let resultText = "";
-
-      function reset() {
-        state = "waiting";
-        resultText = "";
-        const now = performance.now();
-        triggerTime = now + (minDelay + Math.random() * (maxDelay - minDelay));
-      }
-
-      canvas.onclick = () => {
-        const now = performance.now();
-        if (state === "waiting") {
-          resultText = "Too early!";
-          onResult({ score: 0, label: "Clicked bait / early", outcome: "loss" });
-          reset();
-        } else if (state === "armed") {
-          const reaction = Math.round(now - startTime);
-          resultText = reaction + " ms";
-          onResult({ score: Math.max(1, 1100 - reaction), label: reaction + " ms", outcome: "win" });
-          reset();
-        }
-      };
-
-      function update() {
-        const now = performance.now();
-        if (state === "waiting" && now >= triggerTime) {
-          const bait = Math.random() < baitChance;
-          flashColor = bait ? "#33334a" : "#0ff";
-          const isBait = bait;
-          if (isBait) {
-            // Bait flash; don't allow a good result
-            state = "bait";
-            setTimeout(() => {
-              if (state === "bait") {
-                state = "waiting";
-                reset();
-              }
-            }, 250);
-          } else {
-            state = "armed";
-            startTime = now;
+      return {
+        update(dt) {
+          weatherTimer += dt;
+          if (weatherTimer > 12000) {
+            weatherTimer = 0;
+            weatherIndex = (weatherIndex + 1) % weathers.length;
+            refreshPackianUI();
+            log(`Weather shifted to ${getCurrentWeather()}.`);
           }
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = state === "waiting" ? "#14162e" : flashColor;
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.strokeStyle = "rgba(255,255,255,0.3)";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(20, 20, w - 40, h - 40);
-
-        ctx.font = "18px system-ui";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#f8f8ff";
-        const txt =
-          state === "waiting"
-            ? "Wait for bright cyan"
-            : state === "armed"
-            ? "Click!"
-            : "Ignore this flash";
-        ctx.fillText(txt, w / 2, h / 2);
-
-        if (resultText) {
-          ctx.font = "14px system-ui";
-          ctx.fillText("Last: " + resultText, w / 2, h * 0.7);
-        }
-      }
-
-      return { update, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 3: Reaction multi‑round ---
-    variantInitializers["reaction-multi"] = (params, onResult) => {
-      const roundsTotal = params.rounds ?? 5;
-      const minDelay = params.minDelay ?? 700;
-      const maxDelay = params.maxDelay ?? 2500;
-      let roundIndex = 0;
-      let times = [];
-      let state = "waiting";
-      let triggerTime = performance.now() + minDelay + Math.random() * (maxDelay - minDelay);
-      let startTime = 0;
-      let message = "Round 1 / " + roundsTotal;
-
-      function resetRound() {
-        const now = performance.now();
-        triggerTime = now + (minDelay + Math.random() * (maxDelay - minDelay));
-        state = "waiting";
-      }
-
-      function finishRun() {
-        const avg =
-          times.length > 0
-            ? Math.round(times.reduce((a, b) => a + b, 0) / times.length)
-            : 0;
-        const score = Math.max(1, 1000 - avg) * roundsTotal;
-        onResult({ score, label: `Avg: ${avg} ms`, outcome: "win" });
-        roundIndex = 0;
-        times = [];
-        message = "Round 1 / " + roundsTotal;
-        resetRound();
-      }
-
-      canvas.onclick = () => {
-        const now = performance.now();
-        if (state === "waiting") {
-          onResult({ score: 0, label: "Clicked early", outcome: "loss" });
-          roundIndex = 0;
-          times = [];
-          message = "Round 1 / " + roundsTotal;
-          resetRound();
-        } else if (state === "armed") {
-          const reaction = Math.round(now - startTime);
-          times.push(reaction);
-          roundIndex++;
-          if (roundIndex >= roundsTotal) {
-            finishRun();
-          } else {
-            message = `Round ${roundIndex + 1} / ${roundsTotal}`;
-            resetRound();
+          for (const p of particles) {
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            if (p.x < 0) p.x += canvas.width;
+            if (p.x > canvas.width) p.x -= canvas.width;
+            if (p.y < 0) p.y += canvas.height;
+            if (p.y > canvas.height) p.y -= canvas.height;
+          }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          for (const p of particles) {
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
           }
         }
       };
+    }
 
-      function update() {
-        const now = performance.now();
-        if (state === "waiting" && now >= triggerTime) {
-          state = "armed";
-          startTime = now;
+    // ---------- Emberforge ----------
+    function createEmberforge() {
+      let heat = 0;
+      let stability = 100;
+      let running = true;
+      let lastSpace = 0;
+
+      function keyHandler(e) {
+        if (!running) return;
+        if (e.code === "Space" && Date.now() - lastSpace > 150) {
+          lastSpace = Date.now();
+          heat += 10 + Math.random() * 10;
+          stability -= 5 + Math.random() * 3;
+          if (stability <= 0) {
+            stability = 0;
+            running = false;
+            const score = Math.round(heat);
+            log(`Emberforge collapsed at ${score} heat.`);
+            submitScore("emberforge", score);
+            refreshProfilePanel();
+          }
         }
       }
+      window.addEventListener("keydown", keyHandler);
 
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = state === "armed" ? "#0ff" : "#10122b";
-        ctx.fillRect(0, 0, w, h);
+      return {
+        update(dt) {
+          if (!running) return;
+          heat += dt * 0.003;
+          stability -= dt * 0.002;
+          if (stability <= 0) {
+            stability = 0;
+            running = false;
+            const score = Math.round(heat);
+            log(`Emberforge collapsed at ${score} heat.`);
+            submitScore("emberforge", score);
+            refreshProfilePanel();
+          }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          const heatNorm = Math.min(1, heat / 500);
+          const color = `hsl(${20 + 40 * heatNorm},100%,${40 + 10 * heatNorm}%)`;
+          ctx.fillStyle = color;
+          ctx.fillRect(40, canvas.height - 40 - heatNorm * (canvas.height - 80), canvas.width - 80, heatNorm * (canvas.height - 80));
 
-        ctx.fillStyle = "#1f2142";
-        for (let y = 0; y < h; y += 25) {
-          ctx.fillRect(0, y, w, 1);
-        }
-
-        ctx.font = "18px system-ui";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#fefefe";
-        ctx.fillText(
-          state === "armed" ? "Click!" : "Wait for cyan flash",
-          w / 2,
-          h / 2
-        );
-
-        ctx.font = "14px system-ui";
-        ctx.fillText(message, w / 2, h * 0.7);
-
-        if (times.length > 0) {
-          const avg = Math.round(
-            times.reduce((a, b) => a + b, 0) / times.length
-          );
+          ctx.fillStyle = "#9aa0d2";
           ctx.font = "12px system-ui";
-          ctx.fillText("Current avg: " + avg + " ms", w / 2, h * 0.84);
-        }
-      }
-
-      return { update, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 4: Memory pairs ---
-    variantInitializers["memory"] = (params, onResult) => {
-      const rows = params.rows ?? 4;
-      const cols = params.cols ?? 4;
-      const total = rows * cols;
-      const pairCount = Math.floor(total / 2);
-      const symbols = [];
-      for (let i = 0; i < pairCount; i++) symbols.push(i, i);
-      // shuffle
-      for (let i = symbols.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [symbols[i], symbols[j]] = [symbols[j], symbols[i]];
-      }
-
-      let revealed = [];
-      let matched = new Set();
-      let moves = 0;
-      let lock = false;
-
-      canvas.onclick = e => {
-        if (lock) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-        const cellW = canvas.width / cols;
-        const cellH = canvas.height / rows;
-        const c = Math.floor(x / cellW);
-        const r = Math.floor(y / cellH);
-        const idx = r * cols + c;
-        if (idx < 0 || idx >= symbols.length) return;
-        if (matched.has(idx) || revealed.includes(idx)) return;
-
-        revealed.push(idx);
-        if (revealed.length === 2) {
-          moves++;
-          const [a, b] = revealed;
-          if (symbols[a] === symbols[b]) {
-            matched.add(a);
-            matched.add(b);
-            revealed = [];
-            if (matched.size === total) {
-              const score = Math.max(1, (pairCount * 10) - moves * 2);
-              onResult({ score, label: `${moves} moves`, outcome: "win" });
-            }
-          } else {
-            lock = true;
-            setTimeout(() => {
-              revealed = [];
-              lock = false;
-            }, 650);
-          }
+          ctx.fillText(`Heat: ${Math.round(heat)}`, 10, 18);
+          ctx.fillText(`Stability: ${Math.round(stability)}`, 10, 34);
+          if (!running) ctx.fillText("Run finished. Select another game to reset.", 10, 52);
         }
       };
+    }
 
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
+    // ---------- Bloomcraft ----------
+    function createBloomcraft() {
+      const blooms = [];
+      const maxBlooms = 5;
+      let timer = 0;
 
-        const cellW = w / cols;
-        const cellH = h / rows;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = Math.min(cellW, cellH) * 0.45 + "px system-ui";
+      for (let i = 0; i < maxBlooms; i++) {
+        blooms.push({
+          growth: Math.random() * 20,
+          mutation: 0,
+          color: baseColors[Math.floor(Math.random() * baseColors.length)],
+          rarity: randomRarity()
+        });
+      }
 
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const idx = r * cols + c;
-            const x = c * cellW;
-            const y = r * cellH;
-            const isMatched = matched.has(idx);
-            const isRevealed = revealed.includes(idx);
-            let color;
-            if (isMatched) color = "#1cc98e";
-            else if (isRevealed) color = "#4ef0ff";
-            else color = "#151633";
-
-            ctx.fillStyle = color;
-            ctx.fillRect(
-              x + 4,
-              y + 4,
-              cellW - 8,
-              cellH - 8
-            );
-
-            if (isRevealed || isMatched) {
-              ctx.fillStyle = "#050617";
-              ctx.fillText(
-                symbols[idx],
-                x + cellW / 2,
-                y + cellH / 2
-              );
+      return {
+        update(dt) {
+          timer += dt;
+          if (timer > 2000) {
+            timer = 0;
+            for (const b of blooms) {
+              b.growth += 5 + Math.random() * 10;
+              const mutWeather = getCurrentWeather();
+              if (Math.random() < mutateChance(mutWeather)) {
+                b.mutation += 10 + Math.random() * 10;
+              }
+            }
+            const totalScore = blooms.reduce((s, b) => s + b.growth + b.mutation * 2, 0);
+            const score = Math.round(totalScore);
+            const u = getUser();
+            if (u) {
+              u.lastScores.bloomcraft = score;
+              saveState();
+              refreshLastScoreLabels();
+              submitScore("bloomcraft", score);
             }
           }
-        }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Moves: " + moves, 10, 18);
-      }
+          const gap = canvas.width / (blooms.length + 1);
+          blooms.forEach((b, i) => {
+            const x = gap * (i + 1);
+            const baseY = canvas.height - 20;
+            const height = Math.min(100, b.growth + b.mutation);
+            ctx.strokeStyle = "#4ef09e";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x, baseY);
+            ctx.lineTo(x, baseY - height);
+            ctx.stroke();
 
-      return { update() {}, render, cleanup() { canvas.onclick = null; } };
-    };
+            ctx.fillStyle = b.color.hex;
+            ctx.beginPath();
+            ctx.arc(x, baseY - height, 10 + b.mutation * 0.2, 0, Math.PI * 2);
+            ctx.fill();
+          });
 
-    // --- 5: Simon‑style sequence ---
-    variantInitializers["simon"] = (params, onResult) => {
-      const pads = params.pads ?? 4;
-      const fast = !!params.fast;
-      const colors = ["#ff5e7a", "#4ef0ff", "#ffc857", "#4ef09e"];
-      let sequence = [];
-      let userIndex = 0;
-      let showing = true;
-      let showIndex = 0;
-      let showTimer = 0;
-      let flashPad = -1;
-      let score = 0;
-
-      function addStep() {
-        sequence.push(Math.floor(Math.random() * pads));
-        userIndex = 0;
-        showing = true;
-        showIndex = 0;
-        showTimer = 0;
-      }
-
-      addStep();
-
-      canvas.onclick = e => {
-        if (showing) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        const dx = x - cx;
-        const dy = y - cy;
-        const angle = Math.atan2(dy, dx); // -PI..PI
-        let padIndex = 0;
-        if (angle >= -Math.PI / 4 && angle < Math.PI / 4) padIndex = 0; // right
-        else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) padIndex = 1; // bottom
-        else if (angle >= (-3 * Math.PI) / 4 && angle < -Math.PI / 4) padIndex = 3; // top
-        else padIndex = 2; // left
-
-        flashPad = padIndex;
-        setTimeout(() => (flashPad = -1), 150);
-
-        if (padIndex === sequence[userIndex]) {
-          userIndex++;
-          if (userIndex >= sequence.length) {
-            score = sequence.length;
-            addStep();
-          }
-        } else {
-          onResult({ score, label: "Sequence length: " + score, outcome: "loss" });
-          sequence = [];
-          score = 0;
-          addStep();
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Weather: ${getCurrentWeather()}`, 10, 18);
+          ctx.fillText("Blooms grow and mutate over time.", 10, 34);
         }
       };
+    }
 
-      function update(dt) {
-        if (!showing) return;
-        showTimer += dt;
-        const delay = fast ? 350 : 550;
-        const pause = fast ? 170 : 250;
-        if (flashPad === -1 && showTimer > pause) {
-          flashPad = sequence[showIndex];
-          showTimer = 0;
-        } else if (flashPad !== -1 && showTimer > delay) {
-          flashPad = -1;
-          showTimer = 0;
-          showIndex++;
-          if (showIndex >= sequence.length) {
-            showing = false;
-          }
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        const cx = w / 2;
-        const cy = h / 2;
-        const radius = Math.min(w, h) * 0.35;
-
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        for (let i = 0; i < pads; i++) {
-          const startAngle = (i * Math.PI * 2) / pads;
-          const endAngle = ((i + 1) * Math.PI * 2) / pads;
-          const baseColor = colors[i % colors.length];
-          const isActive = i === flashPad;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.arc(cx, cy, radius, startAngle, endAngle);
-          ctx.closePath();
-          ctx.fillStyle = isActive ? baseColor : "#151633";
-          ctx.fill();
-          ctx.strokeStyle = isActive ? "#ffffff" : "#272b4b";
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = "#050617";
-        ctx.fill();
-        ctx.strokeStyle = "#272b4b";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        ctx.fillStyle = "#fefefe";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = "16px system-ui";
-        ctx.fillText(showing ? "Watch" : "Repeat", cx, cy);
-
-        ctx.font = "12px system-ui";
-        ctx.fillStyle = "#9aa0d2";
-        ctx.fillText("Length: " + sequence.length, cx, cy + radius * 0.55);
-      }
-
-      return { update, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 6: Dodger survival ---
-    variantInitializers["dodger"] = (params, onResult) => {
-      const speedFactor = params.speed ?? 2;
-      const tiny = !!params.tinyPlayer;
-      const player = {
-        x: canvas.width / 2,
-        y: canvas.height - 35,
-        w: tiny ? 18 : 32,
-        h: tiny ? 18 : 26,
-        speed: 0.45
-      };
-      const keys = { left: false, right: false };
-      const blocks = [];
-      let elapsed = 0;
+    // ---------- Voltline ----------
+    function createVoltline() {
+      const nodes = [];
+      const nodeCount = 8;
+      let chain = 0;
       let alive = true;
+
+      for (let i = 0; i < nodeCount; i++) {
+        nodes.push({
+          x: 40 + i * ((canvas.width - 80) / (nodeCount - 1)),
+          y: canvas.height / 2 + (Math.random() - 0.5) * 60,
+          charge: 0,
+          overload: 100 + Math.random() * 50
+        });
+      }
+
+      function clickHandler(e) {
+        if (!alive) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+        for (const n of nodes) {
+          const dx = x - n.x;
+          const dy = y - n.y;
+          if (dx * dx + dy * dy <= 12 * 12) {
+            n.charge += 20 + Math.random() * 15;
+            chain++;
+            const idx = nodes.indexOf(n);
+            if (idx > 0) nodes[idx - 1].charge += 5;
+            if (idx < nodes.length - 1) nodes[idx + 1].charge += 5;
+            if (n.charge > n.overload) {
+              alive = false;
+              const score = chain;
+              log(`Voltline overloaded at chain ${score}.`);
+              submitScore("voltline", score);
+              refreshProfilePanel();
+            }
+            break;
+          }
+        }
+      }
+
+      canvas.addEventListener("click", clickHandler);
+
+      return {
+        update(dt) {
+          if (!alive) return;
+          for (const n of nodes) {
+            n.charge -= dt * 0.01;
+            if (n.charge < 0) n.charge = 0;
+          }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.strokeStyle = "#272b4b";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          nodes.forEach((n, i) => {
+            if (i === 0) ctx.moveTo(n.x, n.y);
+            else ctx.lineTo(n.x, n.y);
+          });
+          ctx.stroke();
+
+          nodes.forEach(n => {
+            const t = Math.min(1, n.charge / n.overload);
+            const col = `hsl(${40 + 80 * (1 - t)},100%,${40 + 10 * t}%)`;
+            ctx.fillStyle = col;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, 8 + t * 4, 0, Math.PI * 2);
+            ctx.fill();
+          });
+
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Chain: ${chain}`, 10, 18);
+          if (!alive) ctx.fillText("Overloaded. Select another game to reset.", 10, 34);
+        }
+      };
+    }
+
+    // ---------- Cryoshift ----------
+    function createCryoshift() {
+      let value = 50;
+      let stability = 100;
+      let frozen = false;
+
+      function keyHandler(e) {
+        if (e.code === "Space") frozen = !frozen;
+      }
+      window.addEventListener("keydown", keyHandler);
+
+      return {
+        update(dt) {
+          if (frozen) {
+            value += dt * 0.02;
+            stability -= dt * 0.02;
+          } else {
+            value += dt * 0.005;
+            stability += dt * 0.01;
+            if (stability > 100) stability = 100;
+          }
+          if (stability <= 0) {
+            stability = 0;
+            const score = Math.round(value);
+            log(`Cryoshift shard shattered at value ${score}.`);
+            submitScore("cryoshift", score);
+            refreshProfilePanel();
+            value = 50;
+            stability = 100;
+          }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const centerX = canvas.width / 2;
+          const centerY = canvas.height / 2;
+          const size = 40 + (value - 50) * 0.1;
+
+          ctx.fillStyle = frozen ? "#4ef0ff" : "#9aa0d2";
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY - size);
+          ctx.lineTo(centerX + size, centerY);
+          ctx.lineTo(centerX, centerY + size);
+          ctx.lineTo(centerX - size, centerY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Value: ${Math.round(value)}`, 10, 18);
+          ctx.fillText(`Stability: ${Math.round(stability)}`, 10, 34);
+          ctx.fillText(`Mode: ${frozen ? "Frozen" : "Thawing"}`, 10, 50);
+        }
+      };
+    }
+
+    // ---------- Riftweave ----------
+    function createRiftweave() {
+      const threads = [];
+      const maxThreads = 6;
+      let tension = 0;
+      let score = 0;
+      let alive = true;
+
+      for (let i = 0; i < maxThreads; i++) {
+        threads.push({
+          x1: Math.random() * canvas.width,
+          y1: Math.random() * canvas.height,
+          x2: Math.random() * canvas.width,
+          y2: Math.random() * canvas.height,
+          color: baseColors[Math.floor(Math.random() * baseColors.length)].hex
+        });
+      }
+
+      function clickHandler() {
+        if (!alive) return;
+        tension += 10;
+        score += 5 + Math.floor(Math.random() * 10);
+        if (Math.random() < tension / 200) {
+          alive = false;
+          log(`Riftweave collapsed at score ${score}.`);
+          submitScore("riftweave", score);
+          refreshProfilePanel();
+        } else {
+          threads.push({
+            x1: Math.random() * canvas.width,
+            y1: Math.random() * canvas.height,
+            x2: Math.random() * canvas.width,
+            y2: Math.random() * canvas.height,
+            color: baseColors[Math.floor(Math.random() * baseColors.length)].hex
+          });
+        }
+      }
+
+      canvas.addEventListener("click", clickHandler);
+
+      return {
+        update(dt) {
+          if (!alive) return;
+          tension -= dt * 0.005;
+          if (tension < 0) tension = 0;
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          threads.forEach(t => {
+            ctx.strokeStyle = t.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(t.x1, t.y1);
+            ctx.lineTo(t.x2, t.y2);
+            ctx.stroke();
+          });
+
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Tension: ${Math.round(tension)}`, 10, 18);
+          ctx.fillText(`Score: ${score}`, 10, 34);
+          if (!alive) ctx.fillText("Pattern collapsed. Select another game to reset.", 10, 50);
+        }
+      };
+    }
+
+    // ---------- Phase Runner ----------
+    function createPhaseRunner() {
+      const lanes = [canvas.height * 0.25, canvas.height * 0.5, canvas.height * 0.75];
+      let laneIndex = 1;
+      let playerX = canvas.width * 0.2;
+      let speed = 0.18;
+      let distance = 0;
+      let obstacles = [];
+      let alive = true;
+
+      function spawnObstacle() {
+        obstacles.push({
+          x: canvas.width + 20,
+          lane: Math.floor(Math.random() * 3),
+          w: 18,
+          h: 18
+        });
+      }
+
       let spawnTimer = 0;
 
-      function spawnBlock() {
-        const bw = 18 + Math.random() * 36;
-        blocks.push({
-          x: Math.random() * (canvas.width - bw),
-          y: -40,
-          w: bw,
-          h: 10 + Math.random() * 18,
-          vy: (0.12 + Math.random() * 0.12) * speedFactor
-        });
-      }
-
-      function keyHandler(e, down) {
-        if (e.key === "ArrowLeft") keys.left = down;
-        if (e.key === "ArrowRight") keys.right = down;
-      }
-
-      window.addEventListener("keydown", e => keyHandler(e, true));
-      window.addEventListener("keyup", e => keyHandler(e, false));
-
-      function endRun() {
-        alive = false;
-        const score = Math.floor(elapsed / 100);
-        onResult({ score, label: `${(elapsed / 1000).toFixed(1)}s survived`, outcome: "loss" });
-      }
-
-      function update(dt) {
+      function keyHandler(e) {
         if (!alive) return;
-        elapsed += dt;
-        spawnTimer += dt;
-        const spawnInterval = 700 / speedFactor;
-        if (spawnTimer > spawnInterval) {
-          spawnTimer = 0;
-          spawnBlock();
-        }
-
-        const move = player.speed * dt * speedFactor;
-        if (keys.left) player.x -= move;
-        if (keys.right) player.x += move;
-        if (player.x < 10) player.x = 10;
-        if (player.x + player.w > canvas.width - 10) player.x = canvas.width - 10 - player.w;
-
-        for (const b of blocks) {
-          b.y += b.vy * dt;
-        }
-
-        // collision
-        for (const b of blocks) {
-          if (
-            b.x < player.x + player.w &&
-            b.x + b.w > player.x &&
-            b.y < player.y + player.h &&
-            b.y + b.h > player.y
-          ) {
-            endRun();
-            break;
-          }
-        }
-
-        // remove offscreen
-        for (let i = blocks.length - 1; i >= 0; i--) {
-          if (blocks[i].y > canvas.height + 40) blocks.splice(i, 1);
+        if (e.code === "ArrowUp" || e.code === "KeyW") {
+          laneIndex = Math.max(0, laneIndex - 1);
+        } else if (e.code === "ArrowDown" || e.code === "KeyS") {
+          laneIndex = Math.min(2, laneIndex + 1);
         }
       }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.fillStyle = "#111325";
-        for (let x = 0; x < w; x += 30) {
-          ctx.fillRect(x, 0, 1, h);
-        }
-
-        ctx.fillStyle = tiny ? "#4ef0ff" : "#4ef09e";
-        ctx.fillRect(player.x, player.y, player.w, player.h);
-
-        ctx.fillStyle = "#ff5e7a";
-        for (const b of blocks) {
-          ctx.fillRect(b.x, b.y, b.w, b.h);
-        }
-
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText(`Time: ${(elapsed / 1000).toFixed(1)}s`, 10, 18);
-      }
+      window.addEventListener("keydown", keyHandler);
 
       return {
-        update,
-        render,
-        cleanup() {
-          window.onkeydown = null;
-          window.onkeyup = null;
-        }
-      };
-    };
-
-    // --- 7: Number grid (1..N²) ---
-    variantInitializers["number-grid"] = (params, onResult) => {
-      const size = params.size ?? 4;
-      const total = size * size;
-      const nums = Array.from({ length: total }, (_, i) => i + 1);
-      for (let i = nums.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [nums[i], nums[j]] = [nums[j], nums[i]];
-      }
-      let next = 1;
-      let startTime = performance.now();
-      let finished = false;
-
-      canvas.onclick = e => {
-        if (finished) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-        const cellW = canvas.width / size;
-        const cellH = canvas.height / size;
-        const c = Math.floor(x / cellW);
-        const r = Math.floor(y / cellH);
-        const idx = r * size + c;
-        if (idx < 0 || idx >= nums.length) return;
-        if (nums[idx] === next) {
-          next++;
-          if (next > total) {
-            finished = true;
-            const time = performance.now() - startTime;
-            const score = Math.max(1, 40000 - time);
-            onResult({
-              score: Math.round(score),
-              label: (time / 1000).toFixed(2) + "s",
-              outcome: "win"
-            });
+        update(dt) {
+          if (!alive) return;
+          const dts = dt;
+          distance += dts * 0.04;
+          spawnTimer += dts;
+          if (spawnTimer > 1100) {
+            spawnTimer = 0;
+            spawnObstacle();
+            speed += 0.003;
           }
-        }
-      };
+          obstacles.forEach(o => { o.x -= speed * dts; });
+          obstacles = obstacles.filter(o => o.x + o.w > -10);
 
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        const cellW = w / size;
-        const cellH = h / size;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = Math.min(cellW, cellH) * 0.4 + "px system-ui";
-
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            const idx = r * size + c;
-            const value = nums[idx];
-            const x = c * cellW;
-            const y = r * cellH;
-            const isNext = value === next;
-            ctx.fillStyle = isNext ? "#4ef0ff" : "#151633";
-            ctx.fillRect(x + 4, y + 4, cellW - 8, cellH - 8);
-            ctx.fillStyle = "#fefefe";
-            ctx.fillText(value, x + cellW / 2, y + cellH / 2);
-          }
-        }
-
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Next: " + next, 10, 18);
-      }
-
-      return { update() {}, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 8: Typing lanes ---
-    variantInitializers["typing"] = (params, onResult) => {
-      const spawnRate = params.spawnRate ?? 1600;
-      const words = ["flux", "nexus", "arc", "phase", "loop", "echo", "nova", "grid", "pulse", "warp"];
-      const active = [];
-      let timer = 0;
-      let score = 0;
-      let streak = 0;
-      let input = "";
-      let alive = true;
-
-      function spawnWord() {
-        const text = words[Math.floor(Math.random() * words.length)];
-        active.push({
-          text,
-          x: 40 + Math.random() * (canvas.width - 80),
-          y: -10,
-          vy: 0.05 + Math.random() * 0.05
-        });
-      }
-
-      function endRun() {
-        alive = false;
-        onResult({ score, label: "Score: " + score, outcome: "loss" });
-      }
-
-      window.addEventListener("keydown", e => {
-        if (!alive) return;
-        if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
-          input += e.key.toLowerCase();
-        } else if (e.key === "Backspace") {
-          input = input.slice(0, -1);
-        } else if (e.key === "Enter") {
-          if (!input) return;
-          const matchIndex = active.findIndex(w => w.text === input);
-          if (matchIndex >= 0) {
-            active.splice(matchIndex, 1);
-            streak++;
-            score += 10 * streak;
-          } else {
-            streak = 0;
-          }
-          input = "";
-        }
-      });
-
-      function update(dt) {
-        if (!alive) return;
-        timer += dt;
-        if (timer > spawnRate) {
-          timer = 0;
-          spawnWord();
-        }
-        for (const w of active) {
-          w.y += w.vy * dt;
-        }
-        for (let i = active.length - 1; i >= 0; i--) {
-          if (active[i].y > canvas.height - 20) {
-            endRun();
-            break;
-          }
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.fillStyle = "#151633";
-        ctx.fillRect(0, h - 40, w, 40);
-
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Type code & press Enter", 10, h - 24);
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "16px system-ui";
-        ctx.fillText(input || " ", 10, h - 8);
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "bottom";
-        ctx.font = "16px system-ui";
-        for (const word of active) {
-          ctx.fillStyle = "#4ef0ff";
-          ctx.fillText(word.text, word.x, word.y);
-        }
-
-        ctx.textAlign = "left";
-        ctx.textBaseline = "alphabetic";
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.fillText("Score: " + score, 10, 18);
-        ctx.fillText("Streak: " + streak, 10, 34);
-      }
-
-      return {
-        update,
-        render,
-        cleanup() {
-          window.onkeydown = null;
-        }
-      };
-    };
-
-    // --- 9: Target clicker ---
-    variantInitializers["target-click"] = (params, onResult) => {
-      const lifetime = params.lifetime ?? 1100;
-      const multi = !!params.multi;
-      const targets = [];
-      let lastSpawn = 0;
-      let score = 0;
-      let combo = 0;
-      let misses = 0;
-
-      function spawnTarget() {
-        const r = 12 + Math.random() * 18;
-        targets.push({
-          x: 20 + Math.random() * (canvas.width - 40),
-          y: 20 + Math.random() * (canvas.height - 40),
-          r,
-          born: performance.now()
-        });
-      }
-
-      canvas.onclick = e => {
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-        let hit = -1;
-        for (let i = 0; i < targets.length; i++) {
-          const t = targets[i];
-          const dx = x - t.x;
-          const dy = y - t.y;
-          if (Math.sqrt(dx * dx + dy * dy) <= t.r) {
-            hit = i;
-            break;
-          }
-        }
-        if (hit >= 0) {
-          targets.splice(hit, 1);
-          combo++;
-          score += 10 * combo;
-        } else {
-          misses++;
-          combo = 0;
-          if (misses >= 5) {
-            onResult({ score, label: "Miss limit reached", outcome: "loss" });
-            score = 0;
-            combo = 0;
-            misses = 0;
-            targets.length = 0;
-          }
-        }
-      };
-
-      function update() {
-        const now = performance.now();
-        if (!multi && targets.length === 0 && now - lastSpawn > 200) {
-          lastSpawn = now;
-          spawnTarget();
-        } else if (multi && now - lastSpawn > 450) {
-          lastSpawn = now;
-          if (targets.length < 5) spawnTarget();
-        }
-
-        for (let i = targets.length - 1; i >= 0; i--) {
-          if (now - targets[i].born > lifetime) {
-            targets.splice(i, 1);
-            misses++;
-            combo = 0;
-            if (misses >= 5) {
-              onResult({ score, label: "Too many misses", outcome: "loss" });
-              score = 0;
-              combo = 0;
-              misses = 0;
-              targets.length = 0;
-            }
-          }
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        const now = performance.now();
-        for (const t of targets) {
-          const age = now - t.born;
-          const p = 1 - Math.min(1, age / lifetime);
-          const outer = t.r * (1 + (1 - p) * 0.5);
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, outer, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(78,240,255,0.12)";
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-          ctx.fillStyle = "#4ef0ff";
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, t.r * 0.4, 0, Math.PI * 2);
-          ctx.fillStyle = "#050617";
-          ctx.fill();
-        }
-
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Score: " + score, 10, 18);
-        ctx.fillText("Combo: " + combo, 10, 34);
-        ctx.fillText("Misses: " + misses + " / 5", 10, 50);
-      }
-
-      return { update, render, cleanup() { canvas.onclick = null; } };
-    };
-
-    // --- 10: Snake ---
-    variantInitializers["snake"] = (params, onResult) => {
-      const speed = params.speed ?? 130;
-      const walls = !!params.walls;
-      const cellSize = 15;
-      const cols = Math.floor(canvas.width / cellSize);
-      const rows = Math.floor(canvas.height / cellSize);
-
-      let dir = { x: 1, y: 0 };
-      let nextDir = { x: 1, y: 0 };
-      let snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
-      let food = {
-        x: Math.floor(Math.random() * cols),
-        y: Math.floor(Math.random() * rows)
-      };
-      let elapsed = 0;
-      let score = 0;
-      let alive = true;
-
-      function placeFood() {
-        let pos;
-        do {
-          pos = {
-            x: Math.floor(Math.random() * cols),
-            y: Math.floor(Math.random() * rows)
-          };
-        } while (snake.some(s => s.x === pos.x && s.y === pos.y));
-        food = pos;
-      }
-
-      window.addEventListener("keydown", e => {
-        if (e.key === "ArrowUp" && dir.y === 0) nextDir = { x: 0, y: -1 };
-        if (e.key === "ArrowDown" && dir.y === 0) nextDir = { x: 0, y: 1 };
-        if (e.key === "ArrowLeft" && dir.x === 0) nextDir = { x: -1, y: 0 };
-        if (e.key === "ArrowRight" && dir.x === 0) nextDir = { x: 1, y: 0 };
-      });
-
-      function tick() {
-        if (!alive) return;
-        dir = nextDir;
-        const head = snake[0];
-        let nx = head.x + dir.x;
-        let ny = head.y + dir.y;
-
-        if (walls) {
-          if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) {
-            alive = false;
-            onResult({ score, label: "Crashed into wall", outcome: "loss" });
-            return;
-          }
-        } else {
-          if (nx < 0) nx = cols - 1;
-          if (nx >= cols) nx = 0;
-          if (ny < 0) ny = rows - 1;
-          if (ny >= rows) ny = 0;
-        }
-
-        if (snake.some(s => s.x === nx && s.y === ny)) {
-          alive = false;
-          onResult({ score, label: "Bit yourself", outcome: "loss" });
-          return;
-        }
-        snake.unshift({ x: nx, y: ny });
-        if (nx === food.x && ny === food.y) {
-          score += 10;
-          placeFood();
-        } else {
-          snake.pop();
-        }
-      }
-
-      function update(dt) {
-        elapsed += dt;
-        if (elapsed > speed) {
-          elapsed = 0;
-          tick();
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.fillStyle = "#111325";
-        ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
-
-        ctx.fillStyle = "#4ef09e";
-        for (const s of snake) {
-          ctx.fillRect(s.x * cellSize, s.y * cellSize, cellSize - 1, cellSize - 1);
-        }
-
-        if (walls) {
-          ctx.strokeStyle = "#ff5e7a";
-          ctx.lineWidth = 2;
-          ctx.strokeRect(1, 1, cols * cellSize - 2, rows * cellSize - 2);
-        }
-
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Score: " + score, 10, 18);
-      }
-
-      return {
-        update,
-        render,
-        cleanup() {
-          window.onkeydown = null;
-        }
-      };
-    };
-
-    // --- 11: Maze ---
-    variantInitializers["maze"] = (params, onResult) => {
-      const size = params.size ?? 9;
-      const grid = Array.from({ length: size }, () =>
-        Array.from({ length: size }, () => 1)
-      );
-
-      // Simple random carving (not perfect maze but playful)
-      function carve(x, y) {
-        const dirs = [
-          [1, 0],
-          [-1, 0],
-          [0, 1],
-          [0, -1]
-        ].sort(() => Math.random() - 0.5);
-        grid[y][x] = 0;
-        for (const [dx, dy] of dirs) {
-          const nx = x + dx * 2;
-          const ny = y + dy * 2;
-          if (nx > 0 && nx < size - 1 && ny > 0 && ny < size - 1 && grid[ny][nx] === 1) {
-            grid[y + dy][x + dx] = 0;
-            carve(nx, ny);
-          }
-        }
-      }
-      carve(1, 1);
-
-      const start = { x: 1, y: 1 };
-      const goal = { x: size - 2, y: size - 2 };
-      let player = { ...start };
-      let pulses = 0;
-      let pulseTimer = 0;
-
-      const pulsingWalls = [];
-      for (let y = 1; y < size - 1; y++) {
-        for (let x = 1; x < size - 1; x++) {
-          if (grid[y][x] === 1 && Math.random() < 0.18) {
-            pulsingWalls.push({ x, y });
-          }
-        }
-      }
-
-      window.addEventListener("keydown", e => {
-        const d = { x: 0, y: 0 };
-        if (e.key === "ArrowUp") d.y = -1;
-        if (e.key === "ArrowDown") d.y = 1;
-        if (e.key === "ArrowLeft") d.x = -1;
-        if (e.key === "ArrowRight") d.x = 1;
-        if (d.x === 0 && d.y === 0) return;
-        const nx = player.x + d.x;
-        const ny = player.y + d.y;
-        if (nx < 0 || nx >= size || ny < 0 || ny >= size) return;
-        // Check pulsing wall state
-        const isPulsing = pulsingWalls.some(w => w.x === nx && w.y === ny);
-        const phase = (pulses % 2) === 1; // when true, pulsing walls are open
-        if (grid[ny][nx] === 0 || (isPulsing && phase)) {
-          player = { x: nx, y: ny };
-        }
-        if (player.x === goal.x && player.y === goal.y) {
-          const score = Math.max(1, 300 - pulses * 2);
-          onResult({ score, label: `Pulses: ${pulses}`, outcome: "win" });
-          player = { ...start };
-          pulses = 0;
-        }
-      });
-
-      function update(dt) {
-        pulseTimer += dt;
-        if (pulseTimer > 900) {
-          pulseTimer = 0;
-          pulses++;
-        }
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.fillStyle = "#050617";
-        ctx.fillRect(0, 0, w, h);
-
-        const cellW = w / size;
-        const cellH = h / size;
-
-        const phase = (pulses % 2) === 1;
-
-        for (let y = 0; y < size; y++) {
-          for (let x = 0; x < size; x++) {
-            const isPulsing = pulsingWalls.some(w => w.x === x && w.y === y);
-            if (grid[y][x] === 1) {
-              if (isPulsing) {
-                ctx.fillStyle = phase ? "#151633" : "#ff5e7a";
-              } else {
-                ctx.fillStyle = "#151633";
+          const py = lanes[laneIndex];
+          for (const o of obstacles) {
+            if (o.lane === laneIndex) {
+              const dx = Math.abs((o.x + o.w / 2) - playerX);
+              if (dx < 14) {
+                alive = false;
+                const score = Math.round(distance);
+                log(`Phase Runner hit an obstacle at distance ${score}.`);
+                submitScore("phaseRunner", score);
+                refreshProfilePanel();
+                break;
               }
-              ctx.fillRect(
-                x * cellW + 2,
-                y * cellH + 2,
-                cellW - 4,
-                cellH - 4
-              );
             }
           }
-        }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.strokeStyle = "#272b4b";
+          ctx.lineWidth = 1;
+          lanes.forEach(y => {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+          });
 
-        // goal
-        ctx.fillStyle = "#4ef09e";
-        ctx.fillRect(
-          goal.x * cellW + 4,
-          goal.y * cellH + 4,
-          cellW - 8,
-          cellH - 8
-        );
+          const py = lanes[laneIndex];
+          ctx.fillStyle = "#4ef0ff";
+          ctx.beginPath();
+          ctx.arc(playerX, py, 10, 0, Math.PI * 2);
+          ctx.fill();
 
-        // player
-        ctx.fillStyle = "#4ef0ff";
-        ctx.beginPath();
-        ctx.arc(
-          player.x * cellW + cellW / 2,
-          player.y * cellH + cellH / 2,
-          Math.min(cellW, cellH) * 0.3,
-          0,
-          Math.PI * 2
-        );
-        ctx.fill();
+          ctx.fillStyle = "#ff5e7a";
+          obstacles.forEach(o => {
+            const y = lanes[o.lane];
+            ctx.fillRect(o.x, y - 9, o.w, o.h);
+          });
 
-        ctx.fillStyle = "#9aa0d2";
-        ctx.font = "12px system-ui";
-        ctx.textAlign = "left";
-        ctx.fillText("Pulses: " + pulses, 10, 18);
-        ctx.fillText("Phase: " + (phase ? "Open" : "Closed"), 10, 34);
-      }
-
-      return {
-        update,
-        render,
-        cleanup() {
-          window.onkeydown = null;
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Distance: ${Math.round(distance)}`, 10, 18);
         }
       };
-    };
+    }
+
+    // ---------- Precision Pulse ----------
+    function createPrecisionPulse() {
+      let t = 0;
+      let pulseInterval = 2000;
+      let pulseCenter = 1000;
+      let waitingForHit = true;
+      let lastHitError = null;
+      let scoreSum = 0;
+      let attempts = 0;
+
+      function keyHandler(e) {
+        if (e.code === "Space" && waitingForHit) {
+          waitingForHit = false;
+          const error = Math.abs(t - pulseCenter);
+          lastHitError = error;
+          const accuracy = Math.max(0, 100 - error / 10);
+          scoreSum += accuracy;
+          attempts++;
+          const avgScore = Math.round(scoreSum / attempts);
+          log(`Precision Pulse hit error: ${Math.round(error)} ms, accuracy: ${Math.round(accuracy)}%.`);
+          submitScore("precisionPulse", avgScore);
+          refreshProfilePanel();
+        }
+      }
+      window.addEventListener("keydown", keyHandler);
+
+      function resetPulse() {
+        t = 0;
+        pulseInterval = 1500 + Math.random() * 1200;
+        pulseCenter = 600 + Math.random() * (pulseInterval - 600);
+        waitingForHit = true;
+        lastHitError = null;
+      }
+
+      resetPulse();
+
+      return {
+        update(dt) {
+          t += dt;
+          if (t > pulseInterval) resetPulse();
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const barY = canvas.height / 2;
+          const barMargin = 30;
+          const barWidth = canvas.width - barMargin * 2;
+          ctx.strokeStyle = "#272b4b";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(barMargin, barY);
+          ctx.lineTo(canvas.width - barMargin, barY);
+          ctx.stroke();
+
+          const centerX = barMargin + (pulseCenter / pulseInterval) * barWidth;
+          ctx.strokeStyle = "#4ef0ff";
+          ctx.beginPath();
+          ctx.moveTo(centerX, barY - 10);
+          ctx.lineTo(centerX, barY + 10);
+          ctx.stroke();
+
+          const markerX = barMargin + (t / pulseInterval) * barWidth;
+          ctx.fillStyle = "#ff5e7a";
+          ctx.beginPath();
+          ctx.arc(markerX, barY, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText("Press Space as close as possible to the center marker.", 10, 18);
+          if (lastHitError !== null) {
+            const acc = Math.max(0, 100 - lastHitError / 10);
+            ctx.fillText(`Last error: ${Math.round(lastHitError)} ms (Accuracy: ${Math.round(acc)}%)`, 10, 34);
+          }
+        }
+      };
+    }
+
+    // Start Packian visualizer after auto-login
+    if (state.currentUser && state.users[state.currentUser]) {
+      startGame("packian");
+    }
   </script>
 </body>
 </html>
