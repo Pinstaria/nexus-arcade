@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Nexus Arcade – Expanded UI Edition</title>
+  <title>Nexus Arcade – Clean Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* ===== Base / Global ===== */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,7 +14,7 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1d1f44, #050617 55%, #000 100%);
+      background: radial-gradient(circle at top, #1d2140, #050617 55%, #000 100%);
       color: #f4f7ff;
       min-height: 100vh;
     }
@@ -50,34 +51,37 @@
     .pill {
       border-radius: 999px;
       padding: 4px 10px;
-      border: 1px solid #272b4b;
-      background: #050617;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(5,6,23,0.9);
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
     }
 
-    /* Auth */
+    .card {
+      background: rgba(5,6,23,0.9);
+      border-radius: 18px;
+      border: 1px solid rgba(39,43,75,0.9);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
 
+    /* ===== Auth ===== */
     #auth-screen {
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 10px;
     }
 
     .auth-card {
-      background: #050617;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
       padding: 20px;
       width: 320px;
     }
 
     .auth-card h1 {
-      margin-bottom: 4px;
       font-size: 1.1rem;
+      margin-bottom: 4px;
     }
 
     .tabs {
@@ -110,7 +114,6 @@
       gap: 8px;
       margin-top: 4px;
     }
-
     .form.active { display: flex; }
 
     .auth-error {
@@ -119,19 +122,23 @@
       font-size: 0.75rem;
     }
 
-    /* App layout */
-
-    #app { padding: 10px; }
+    /* ===== App Layout ===== */
+    #app {
+      padding: 10px;
+    }
 
     .app-header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       margin-bottom: 8px;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .app-header h1 { font-size: 1.2rem; }
+    .app-header h1 {
+      font-size: 1.2rem;
+    }
 
     .header-right {
       display: flex;
@@ -142,24 +149,18 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 2.2fr 1.3fr;
-      gap: 8px;
+      grid-template-columns: 2fr 1.4fr;
+      gap: 10px;
     }
 
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
     }
 
-    .panel {
-      background: #050617cc;
-      border-radius: 18px;
-      border: 1px solid #272b4b;
+    /* ===== Left: Games ===== */
+    .game-panel {
       padding: 8px;
     }
-
-    .panel h2 { font-size: 0.9rem; margin-bottom: 4px; }
-
-    /* Left: Games */
 
     .games-grid {
       display: grid;
@@ -169,10 +170,9 @@
     }
 
     .game-tile {
-      background: #111325;
+      background: linear-gradient(145deg, #101326, #050617);
       border-radius: 14px;
       padding: 8px;
-      text-align: left;
       cursor: pointer;
       border: 1px solid #272b4b;
       font-size: 0.75rem;
@@ -180,17 +180,29 @@
       grid-template-columns: 26px 1fr;
       gap: 6px;
       align-items: center;
+      transition: transform 0.08s, box-shadow 0.08s, border-color 0.08s;
+    }
+
+    .game-tile:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .game-tile.active {
+      border-color: #4ef0ff;
+      box-shadow: 0 0 12px rgba(78,240,255,0.9);
     }
 
     .game-icon {
       width: 24px;
       height: 24px;
       border-radius: 8px;
-      background: #050617;
+      background: radial-gradient(circle at top, #ff5ef7, #4ef0ff);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.9rem;
+      color: #050617;
     }
 
     .game-tile h3 {
@@ -218,26 +230,25 @@
       color: #9aa0d2;
     }
 
-    .game-tile.active {
-      border-color: #4ef0ff;
-      box-shadow: 0 0 8px rgba(78,240,255,0.7);
-    }
-
     #game-canvas {
       display: block;
       width: 100%;
       border-radius: 12px;
       background: #050617;
       margin-top: 4px;
+      border: 1px solid #272b4b;
     }
 
-    #game-info {
+    #game-help {
       margin-top: 4px;
       font-size: 0.75rem;
       color: #9aa0d2;
     }
 
-    /* Right: tabbed panels */
+    /* ===== Right: Two Tabs ===== */
+    .right-panel {
+      padding: 8px;
+    }
 
     .right-tabs {
       display: flex;
@@ -265,17 +276,19 @@
 
     .right-tab {
       display: none;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
-    .right-tab.active { display: block; }
+    .right-tab.active {
+      display: block;
+    }
 
     .row {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
       align-items: center;
-      margin: 2px 0;
+      margin: 3px 0;
     }
 
     .inventory-grid {
@@ -343,6 +356,7 @@
       border: 1px solid #272b4b;
       padding: 4px;
       font-size: 0.7rem;
+      background: #050617;
     }
 
     .lb-entry {
@@ -353,14 +367,6 @@
 
     .index-entry {
       margin-bottom: 2px;
-    }
-
-    .chip {
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 0.7rem;
-      border: 1px solid #272b4b;
-      background: #050617;
     }
 
     .profile-stat {
@@ -374,9 +380,9 @@
 <body>
   <!-- AUTH SCREEN -->
   <div id="auth-screen">
-    <div class="auth-card">
+    <div class="card auth-card">
       <h1>Nexus Arcade</h1>
-      <p class="muted small">Single‑file edition · local accounts only</p>
+      <p class="muted small">Single-file edition · everything saved in this browser</p>
 
       <div class="tabs">
         <button class="tab active" data-tab="login">Login</button>
@@ -398,7 +404,7 @@
       </form>
 
       <p class="muted small" style="margin-top:6px;">
-        Accounts, inventory, and leaderboards are stored in <strong>this browser only</strong> using localStorage.
+        You can make multiple users & test different paths. No server, no backend, just this file.
       </p>
     </div>
   </div>
@@ -419,17 +425,17 @@
 
     <main class="layout">
       <!-- LEFT: GAMES -->
-      <section class="panel">
-        <h2>Games & Systems</h2>
+      <section class="card game-panel">
+        <div class="muted small" style="margin-bottom:4px;">1. Choose a game  ·  2. Read the short help under the canvas  ·  3. Play</div>
         <div class="games-grid">
           <button class="game-tile" data-game="packian">
             <div class="game-icon">P</div>
             <div>
               <h3>Packian</h3>
-              <p>Packs, rarities, mutations, crafting, index.</p>
+              <p>Packs, rarities, mutations, crafting, collecting.</p>
               <div class="game-tags">
+                <span class="game-tag">Core</span>
                 <span class="game-tag">Economy</span>
-                <span class="game-tag">Collecting</span>
               </div>
             </div>
           </button>
@@ -438,10 +444,9 @@
             <div class="game-icon">E</div>
             <div>
               <h3>Emberforge</h3>
-              <p>Fuel the forge without collapsing stability.</p>
+              <p>Space = fuel. Collapse when stability hits 0.</p>
               <div class="game-tags">
                 <span class="game-tag">Risk</span>
-                <span class="game-tag">Timing</span>
               </div>
             </div>
           </button>
@@ -450,10 +455,9 @@
             <div class="game-icon">B</div>
             <div>
               <h3>Bloomcraft</h3>
-              <p>Grow and mutate color‑plants over time.</p>
+              <p>Blooms grow & mutate based on weather.</p>
               <div class="game-tags">
                 <span class="game-tag">Idle</span>
-                <span class="game-tag">Weather</span>
               </div>
             </div>
           </button>
@@ -462,10 +466,9 @@
             <div class="game-icon">V</div>
             <div>
               <h3>Voltline</h3>
-              <p>Click nodes, build chain, avoid overload.</p>
+              <p>Click nodes. Longer chain = better score.</p>
               <div class="game-tags">
                 <span class="game-tag">Chain</span>
-                <span class="game-tag">Precision</span>
               </div>
             </div>
           </button>
@@ -474,7 +477,7 @@
             <div class="game-icon">C</div>
             <div>
               <h3>Cryoshift</h3>
-              <p>Freeze/thaw shards, balance value vs stability.</p>
+              <p>Space = Freeze/Thaw. Don’t shatter.</p>
               <div class="game-tags">
                 <span class="game-tag">Balance</span>
               </div>
@@ -485,7 +488,7 @@
             <div class="game-icon">R</div>
             <div>
               <h3>Riftweave</h3>
-              <p>Weave colored threads at rising tension.</p>
+              <p>Click to add threads & tension.</p>
               <div class="game-tags">
                 <span class="game-tag">Score</span>
               </div>
@@ -496,10 +499,9 @@
             <div class="game-icon">↕</div>
             <div>
               <h3>Phase Runner</h3>
-              <p>Switch lanes, dodge blocks, survive longest.</p>
+              <p>W/S or ↑/↓ to change lane & dodge.</p>
               <div class="game-tags">
                 <span class="game-tag">Reflex</span>
-                <span class="game-tag">Survival</span>
               </div>
             </div>
           </button>
@@ -508,33 +510,46 @@
             <div class="game-icon">◎</div>
             <div>
               <h3>Precision Pulse</h3>
-              <p>Hit pulses as close to perfect as possible.</p>
+              <p>Space near center = high accuracy.</p>
               <div class="game-tags">
                 <span class="game-tag">Timing</span>
-                <span class="game-tag">Accuracy</span>
+              </div>
+            </div>
+          </button>
+
+          <button class="game-tile" data-game="shardTowers">
+            <div class="game-icon">▲</div>
+            <div>
+              <h3>Shard Towers</h3>
+              <p>Buy towers, they earn shards per tick.</p>
+              <div class="game-tags">
+                <span class="game-tag">Idle</span>
+                <span class="game-tag">Upgrades</span>
               </div>
             </div>
           </button>
         </div>
 
         <canvas id="game-canvas" width="480" height="270"></canvas>
-        <div id="game-info" class="muted small">
-          Select a game above to begin. In some games, use Space or clicks as indicated.
+        <div id="game-help" class="muted small">
+          Select a game above to see its controls and goal here.
         </div>
       </section>
 
-      <!-- RIGHT: TABBED SYSTEMS -->
-      <section class="panel">
+      <!-- RIGHT: PACKIAN + ARCADE INFO -->
+      <section class="card right-panel">
         <div class="right-tabs">
-          <button class="right-tab-btn active" data-rtab="packian-panel">Packian</button>
-          <button class="right-tab-btn" data-rtab="systems-panel">Systems</button>
-          <button class="right-tab-btn" data-rtab="leaderboard-panel">Leaderboards</button>
-          <button class="right-tab-btn" data-rtab="profile-panel">Profile</button>
+          <button class="right-tab-btn active" data-rtab="tab-packian">Packian</button>
+          <button class="right-tab-btn" data-rtab="tab-arcade">Arcade & Scores</button>
         </div>
 
-        <!-- PACKIAN PANEL -->
-        <div id="packian-panel" class="right-tab active">
-          <div class="row">
+        <!-- PACKIAN TAB -->
+        <div id="tab-packian" class="right-tab active">
+          <p class="muted small">
+            Packian basics: Open packs ▸ get colors ▸ select some ▸ mutate or sell ▸ fill your Packidex.
+          </p>
+
+          <div class="row" style="margin-top:4px;">
             <span class="muted small">Weather: <strong id="weather-label">Clear</strong></span>
             <span class="muted small">Index entries: <strong id="index-count">0</strong></span>
           </div>
@@ -545,58 +560,34 @@
             <button id="btn-sell">Sell Selected</button>
           </div>
 
-          <div class="inventory-grid" id="inventory"></div>
+          <div id="inventory" class="inventory-grid"></div>
 
-          <div class="row" style="margin-top:4px;">
+          <p class="muted small" style="margin-top:4px;">Craft recipes from selected items:</p>
+          <div class="row">
             <input id="recipe-name" type="text" placeholder="Recipe name" />
             <select id="recipe-visibility">
               <option value="private">Private</option>
               <option value="public">Public</option>
             </select>
-            <button id="btn-save-recipe">Save recipe from selected</button>
+            <button id="btn-save-recipe">Save recipe</button>
           </div>
 
           <p class="muted small" style="margin-top:4px;">Your recipes:</p>
-          <div class="recipes-list" id="recipes"></div>
+          <div id="recipes" class="recipes-list"></div>
 
-          <p class="muted small" style="margin-top:4px;">Packidex (index of discovered color+rarity combos):</p>
-          <div class="index-box" id="index-box"></div>
+          <p class="muted small" style="margin-top:4px;">Packidex (discovered color+rarity combos):</p>
+          <div id="index-box" class="index-box"></div>
         </div>
 
-        <!-- SYSTEMS PANEL -->
-        <div id="systems-panel" class="right-tab">
-          <h3 class="small">Systems Snapshot</h3>
-          <div class="row">
-            <span class="muted small">Emberforge heat: <strong id="emberforge-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Bloomcraft best bloom: <strong id="bloomcraft-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Voltline top chain: <strong id="voltline-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Cryoshift stability: <strong id="cryoshift-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Riftweave score: <strong id="riftweave-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Phase Runner distance: <strong id="phaseRunner-last">–</strong></span>
-          </div>
-          <div class="row">
-            <span class="muted small">Precision Pulse accuracy: <strong id="precisionPulse-last">–</strong></span>
-          </div>
+        <!-- ARCADE & SCORES TAB -->
+        <div id="tab-arcade" class="right-tab">
+          <h3 class="small">Your snapshot</h3>
+          <div id="profile-stats"></div>
 
-          <h3 class="small" style="margin-top:6px;">Event Log</h3>
-          <div id="log-box" class="list-box small muted">
-            Welcome to Nexus Arcade. All data is local to this browser.
-          </div>
-        </div>
+          <h3 class="small" style="margin-top:6px;">Recent scores (this user)</h3>
+          <div id="recent-scores" class="list-box"></div>
 
-        <!-- LEADERBOARD PANEL -->
-        <div id="leaderboard-panel" class="right-tab">
-          <h3 class="small">Leaderboards</h3>
+          <h3 class="small" style="margin-top:6px;">Leaderboards (local only)</h3>
           <div class="row">
             <select id="lb-game-select">
               <option value="packian">Packian value streak</option>
@@ -607,24 +598,26 @@
               <option value="riftweave">Riftweave score</option>
               <option value="phaseRunner">Phase Runner distance</option>
               <option value="precisionPulse">Precision Pulse accuracy</option>
+              <option value="shardTowers">Shard Towers shards</option>
             </select>
-            <button id="lb-refresh">Refresh</button>
+            <button id="lb-refresh">Show</button>
           </div>
           <div id="leaderboard" class="leaderboard"></div>
-        </div>
 
-        <!-- PROFILE PANEL -->
-        <div id="profile-panel" class="right-tab">
-          <h3 class="small">Profile overview</h3>
-          <div id="profile-stats"></div>
+          <h3 class="small" style="margin-top:6px;">Event log</h3>
+          <div id="log-box" class="list-box small muted">
+            Welcome to Nexus Arcade. Everything you do is logged here.
+          </div>
         </div>
       </section>
     </main>
   </div>
 
   <script>
-    // ---------- Local storage ----------
-    const STORAGE_KEY = "nexusArcadeState_v2";
+    /* ==========================
+       Basic state & helpers
+       ========================== */
+    const STORAGE_KEY = "nexusArcade_clean_v1";
 
     function loadState() {
       try {
@@ -644,11 +637,14 @@
 
     function log(msg) {
       const box = document.getElementById("log-box");
+      if (!box) return;
       const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       box.innerHTML = `[${time}] ${msg}<br>` + box.innerHTML;
     }
 
-    // ---------- Auth ----------
+    /* ==========================
+       Auth
+       ========================== */
     const authScreen = document.getElementById("auth-screen");
     const app = document.getElementById("app");
     const welcomeEl = document.getElementById("welcome");
@@ -684,7 +680,7 @@
           currency: 250,
           inventory: [],
           recipes: [],
-          packIndex: {}, // key: baseId:rarity
+          packIndex: {},
           lastScores: {
             packian: null,
             emberforge: null,
@@ -693,11 +689,17 @@
             cryoshift: null,
             riftweave: null,
             phaseRunner: null,
-            precisionPulse: null
+            precisionPulse: null,
+            shardTowers: null
           }
         };
       }
       return state.users[username];
+    }
+
+    function getUser() {
+      if (!state.currentUser) return null;
+      return ensureUser(state.currentUser);
     }
 
     function setCurrentUser(username) {
@@ -710,10 +712,9 @@
       updateCurrency();
       refreshPackianUI();
       refreshIndexBox();
-      refreshLastScoreLabels();
       refreshProfilePanel();
+      refreshRecentScores();
       log(`Logged in as ${u.username}.`);
-      // Start default game
       startGame("packian");
     }
 
@@ -763,22 +764,19 @@
       log("Logged out.");
     });
 
-    function getUser() {
-      if (!state.currentUser) return null;
-      return ensureUser(state.currentUser);
-    }
-
     function updateCurrency() {
       const u = getUser();
       currencyPill.textContent = `Credits: ${u ? u.currency : 0}`;
     }
 
-    // Auto-login if previous user exists
+    // Auto-login if last user exists
     if (state.currentUser && state.users[state.currentUser]) {
       setCurrentUser(state.currentUser);
     }
 
-    // ---------- Right-side tabs ----------
+    /* ==========================
+       Right tabs (Packian / Arcade)
+       ========================== */
     document.querySelectorAll(".right-tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".right-tab-btn").forEach(b => b.classList.remove("active"));
@@ -788,10 +786,12 @@
       });
     });
 
-    // ---------- Game engine ----------
+    /* ==========================
+       Game engine
+       ========================== */
     const canvas = document.getElementById("game-canvas");
     const ctx = canvas.getContext("2d");
-    const gameInfo = document.getElementById("game-info");
+    const gameHelp = document.getElementById("game-help");
     const gameTiles = document.querySelectorAll(".game-tile");
 
     let currentGame = null;
@@ -806,31 +806,28 @@
       if (loopHandle) cancelAnimationFrame(loopHandle);
       currentGame = null;
 
-      if (gameId === "packian") {
-        gameInfo.textContent = "Packian: open packs, mutate colors, craft recipes, fill the Packidex.";
-        currentGame = createPackianVisualizer();
-      } else if (gameId === "emberforge") {
-        gameInfo.textContent = "Emberforge: press Space to add fuel. Stop before stability hits 0.";
-        currentGame = createEmberforge();
-      } else if (gameId === "bloomcraft") {
-        gameInfo.textContent = "Bloomcraft: blooms grow/mutate automatically based on weather.";
-        currentGame = createBloomcraft();
-      } else if (gameId === "voltline") {
-        gameInfo.textContent = "Voltline: click nodes to add charge and extend the chain.";
-        currentGame = createVoltline();
-      } else if (gameId === "cryoshift") {
-        gameInfo.textContent = "Cryoshift: press Space to toggle Frozen/Thawing.";
-        currentGame = createCryoshift();
-      } else if (gameId === "riftweave") {
-        gameInfo.textContent = "Riftweave: click canvas to add tension and threads.";
-        currentGame = createRiftweave();
-      } else if (gameId === "phaseRunner") {
-        gameInfo.textContent = "Phase Runner: use W/S or Up/Down to change lanes and avoid blocks.";
-        currentGame = createPhaseRunner();
-      } else if (gameId === "precisionPulse") {
-        gameInfo.textContent = "Precision Pulse: press Space as close as possible to pulse center.";
-        currentGame = createPrecisionPulse();
-      }
+      const helpText = {
+        packian: "Packian: Click 'Open Pack', then click items to select them. Use 'Mutate' or 'Sell'. Index fills as you discover combos.",
+        emberforge: "Emberforge: Press Space to feed the forge. More heat is good, but if Stability hits 0, the run ends.",
+        bloomcraft: "Bloomcraft: Blooms grow & mutate automatically over time. Just watch and see how the weather affects them.",
+        voltline: "Voltline: Click nodes to charge them. Each successful click extends the chain, but too much charge overloads.",
+        cryoshift: "Cryoshift: Press Space to toggle Frozen/Thawing. Frozen grows value fast but loses stability.",
+        riftweave: "Riftweave: Click the canvas to add threads and tension. Too much tension and the weave collapses.",
+        phaseRunner: "Phase Runner: Use W/S or Up/Down to change lanes and dodge red blocks. Distance = score.",
+        precisionPulse: "Precision Pulse: Press Space as close as possible to the center marker. Smaller time error = higher accuracy.",
+        shardTowers: "Shard Towers: Use your credits to buy towers. Each tower type generates shards every few seconds."
+      };
+      gameHelp.textContent = helpText[gameId] || "Select a game to see its goal and controls.";
+
+      if (gameId === "packian") currentGame = createPackianVisualizer();
+      else if (gameId === "emberforge") currentGame = createEmberforge();
+      else if (gameId === "bloomcraft") currentGame = createBloomcraft();
+      else if (gameId === "voltline") currentGame = createVoltline();
+      else if (gameId === "cryoshift") currentGame = createCryoshift();
+      else if (gameId === "riftweave") currentGame = createRiftweave();
+      else if (gameId === "phaseRunner") currentGame = createPhaseRunner();
+      else if (gameId === "precisionPulse") currentGame = createPrecisionPulse();
+      else if (gameId === "shardTowers") currentGame = createShardTowers();
 
       lastTime = performance.now();
       function loop(ts) {
@@ -847,10 +844,13 @@
       tile.addEventListener("click", () => startGame(tile.dataset.game));
     });
 
-    // ---------- Leaderboards ----------
+    /* ==========================
+       Leaderboards & profile
+       ========================== */
     const lbSelect = document.getElementById("lb-game-select");
     const lbRefresh = document.getElementById("lb-refresh");
     const lbBox = document.getElementById("leaderboard");
+    const recentScoresBox = document.getElementById("recent-scores");
 
     function submitScore(gameId, score) {
       const u = getUser();
@@ -863,8 +863,8 @@
       saveState();
       u.lastScores[gameId] = score;
       saveState();
-      refreshLastScoreLabels();
       refreshProfilePanel();
+      refreshRecentScores();
     }
 
     function renderLeaderboard(gameId) {
@@ -885,20 +885,6 @@
 
     lbRefresh.addEventListener("click", () => renderLeaderboard(lbSelect.value));
 
-    function refreshLastScoreLabels() {
-      const u = getUser();
-      if (!u) return;
-      const ls = u.lastScores;
-      const ids = [
-        "emberforge", "bloomcraft", "voltline", "cryoshift",
-        "riftweave", "phaseRunner", "precisionPulse"
-      ];
-      ids.forEach(id => {
-        const el = document.getElementById(id + "-last");
-        if (el) el.textContent = ls[id] ?? "–";
-      });
-    }
-
     function refreshProfilePanel() {
       const u = getUser();
       const box = document.getElementById("profile-stats");
@@ -917,7 +903,37 @@
       `;
     }
 
-    // ---------- Packian data ----------
+    function refreshRecentScores() {
+      const u = getUser();
+      if (!u) return;
+      const ls = u.lastScores;
+      const labels = {
+        packian: "Packian",
+        emberforge: "Emberforge",
+        bloomcraft: "Bloomcraft",
+        voltline: "Voltline",
+        cryoshift: "Cryoshift",
+        riftweave: "Riftweave",
+        phaseRunner: "Phase Runner",
+        precisionPulse: "Precision Pulse",
+        shardTowers: "Shard Towers"
+      };
+      recentScoresBox.innerHTML = "";
+      Object.keys(ls).forEach(gameId => {
+        if (ls[gameId] !== null) {
+          const div = document.createElement("div");
+          div.textContent = `${labels[gameId]}: ${ls[gameId]}`;
+          recentScoresBox.appendChild(div);
+        }
+      });
+      if (!recentScoresBox.innerHTML) {
+        recentScoresBox.textContent = "Play any game to see scores here.";
+      }
+    }
+
+    /* ==========================
+       Packian data & UI
+       ========================== */
     const rarities = [
       { name: "Common", weight: 55, mult: 1 },
       { name: "Uncommon", weight: 20, mult: 1.5 },
@@ -1007,7 +1023,6 @@
       return false;
     }
 
-    // ---------- Packian UI ----------
     const weatherLabel = document.getElementById("weather-label");
     const indexCountEl = document.getElementById("index-count");
     const inventoryEl = document.getElementById("inventory");
@@ -1198,7 +1213,9 @@
       refreshPackianUI();
     });
 
-    // ---------- Packian visualizer ----------
+    /* ==========================
+       Packian visualizer
+       ========================== */
     function createPackianVisualizer() {
       const particles = [];
       for (let i = 0; i < 60; i++) {
@@ -1242,7 +1259,9 @@
       };
     }
 
-    // ---------- Emberforge ----------
+    /* ==========================
+       Emberforge
+       ========================== */
     function createEmberforge() {
       let heat = 0;
       let stability = 100;
@@ -1261,7 +1280,6 @@
             const score = Math.round(heat);
             log(`Emberforge collapsed at ${score} heat.`);
             submitScore("emberforge", score);
-            refreshProfilePanel();
           }
         }
       }
@@ -1278,7 +1296,6 @@
             const score = Math.round(heat);
             log(`Emberforge collapsed at ${score} heat.`);
             submitScore("emberforge", score);
-            refreshProfilePanel();
           }
         },
         render() {
@@ -1293,12 +1310,14 @@
           ctx.font = "12px system-ui";
           ctx.fillText(`Heat: ${Math.round(heat)}`, 10, 18);
           ctx.fillText(`Stability: ${Math.round(stability)}`, 10, 34);
-          if (!running) ctx.fillText("Run finished. Select another game to reset.", 10, 52);
+          if (!running) ctx.fillText("Run finished. Switch games to reset.", 10, 52);
         }
       };
     }
 
-    // ---------- Bloomcraft ----------
+    /* ==========================
+       Bloomcraft
+       ========================== */
     function createBloomcraft() {
       const blooms = [];
       const maxBlooms = 5;
@@ -1331,7 +1350,6 @@
             if (u) {
               u.lastScores.bloomcraft = score;
               saveState();
-              refreshLastScoreLabels();
               submitScore("bloomcraft", score);
             }
           }
@@ -1361,12 +1379,14 @@
           ctx.fillStyle = "#9aa0d2";
           ctx.font = "12px system-ui";
           ctx.fillText(`Weather: ${getCurrentWeather()}`, 10, 18);
-          ctx.fillText("Blooms grow and mutate over time.", 10, 34);
+          ctx.fillText("Blooms grow & mutate automatically.", 10, 34);
         }
       };
     }
 
-    // ---------- Voltline ----------
+    /* ==========================
+       Voltline
+       ========================== */
     function createVoltline() {
       const nodes = [];
       const nodeCount = 8;
@@ -1401,7 +1421,6 @@
               const score = chain;
               log(`Voltline overloaded at chain ${score}.`);
               submitScore("voltline", score);
-              refreshProfilePanel();
             }
             break;
           }
@@ -1443,12 +1462,14 @@
           ctx.fillStyle = "#9aa0d2";
           ctx.font = "12px system-ui";
           ctx.fillText(`Chain: ${chain}`, 10, 18);
-          if (!alive) ctx.fillText("Overloaded. Select another game to reset.", 10, 34);
+          if (!alive) ctx.fillText("Overloaded. Switch games to reset.", 10, 34);
         }
       };
     }
 
-    // ---------- Cryoshift ----------
+    /* ==========================
+       Cryoshift
+       ========================== */
     function createCryoshift() {
       let value = 50;
       let stability = 100;
@@ -1474,7 +1495,6 @@
             const score = Math.round(value);
             log(`Cryoshift shard shattered at value ${score}.`);
             submitScore("cryoshift", score);
-            refreshProfilePanel();
             value = 50;
             stability = 100;
           }
@@ -1505,7 +1525,9 @@
       };
     }
 
-    // ---------- Riftweave ----------
+    /* ==========================
+       Riftweave
+       ========================== */
     function createRiftweave() {
       const threads = [];
       const maxThreads = 6;
@@ -1531,7 +1553,6 @@
           alive = false;
           log(`Riftweave collapsed at score ${score}.`);
           submitScore("riftweave", score);
-          refreshProfilePanel();
         } else {
           threads.push({
             x1: Math.random() * canvas.width,
@@ -1568,12 +1589,14 @@
           ctx.font = "12px system-ui";
           ctx.fillText(`Tension: ${Math.round(tension)}`, 10, 18);
           ctx.fillText(`Score: ${score}`, 10, 34);
-          if (!alive) ctx.fillText("Pattern collapsed. Select another game to reset.", 10, 50);
+          if (!alive) ctx.fillText("Pattern collapsed. Switch games to reset.", 10, 50);
         }
       };
     }
 
-    // ---------- Phase Runner ----------
+    /* ==========================
+       Phase Runner
+       ========================== */
     function createPhaseRunner() {
       const lanes = [canvas.height * 0.25, canvas.height * 0.5, canvas.height * 0.75];
       let laneIndex = 1;
@@ -1582,6 +1605,7 @@
       let distance = 0;
       let obstacles = [];
       let alive = true;
+      let spawnTimer = 0;
 
       function spawnObstacle() {
         obstacles.push({
@@ -1592,15 +1616,10 @@
         });
       }
 
-      let spawnTimer = 0;
-
       function keyHandler(e) {
         if (!alive) return;
-        if (e.code === "ArrowUp" || e.code === "KeyW") {
-          laneIndex = Math.max(0, laneIndex - 1);
-        } else if (e.code === "ArrowDown" || e.code === "KeyS") {
-          laneIndex = Math.min(2, laneIndex + 1);
-        }
+        if (e.code === "ArrowUp" || e.code === "KeyW") laneIndex = Math.max(0, laneIndex - 1);
+        else if (e.code === "ArrowDown" || e.code === "KeyS") laneIndex = Math.min(2, laneIndex + 1);
       }
       window.addEventListener("keydown", keyHandler);
 
@@ -1627,7 +1646,6 @@
                 const score = Math.round(distance);
                 log(`Phase Runner hit an obstacle at distance ${score}.`);
                 submitScore("phaseRunner", score);
-                refreshProfilePanel();
                 break;
               }
             }
@@ -1664,7 +1682,9 @@
       };
     }
 
-    // ---------- Precision Pulse ----------
+    /* ==========================
+       Precision Pulse
+       ========================== */
     function createPrecisionPulse() {
       let t = 0;
       let pulseInterval = 2000;
@@ -1685,7 +1705,6 @@
           const avgScore = Math.round(scoreSum / attempts);
           log(`Precision Pulse hit error: ${Math.round(error)} ms, accuracy: ${Math.round(accuracy)}%.`);
           submitScore("precisionPulse", avgScore);
-          refreshProfilePanel();
         }
       }
       window.addEventListener("keydown", keyHandler);
@@ -1743,9 +1762,82 @@
       };
     }
 
-    // Start Packian visualizer after auto-login
-    if (state.currentUser && state.users[state.currentUser]) {
-      startGame("packian");
+    /* ==========================
+       Shard Towers (new game)
+       ========================== */
+    function createShardTowers() {
+      const u = getUser();
+      if (!u.shardTowers) {
+        u.shardTowers = {
+          shards: 0,
+          towers: [
+            { name: "Small Tower", level: 0, baseCost: 50, gain: 1 },
+            { name: "Medium Tower", level: 0, baseCost: 150, gain: 4 },
+            { name: "Large Tower", level: 0, baseCost: 400, gain: 10 }
+          ]
+        };
+      }
+      let timer = 0;
+
+      function buyTower(idx) {
+        const t = u.shardTowers.towers[idx];
+        const cost = Math.round(t.baseCost * Math.pow(1.6, t.level));
+        if (u.currency < cost) {
+          log("Not enough credits for this tower.");
+          return;
+        }
+        u.currency -= cost;
+        t.level++;
+        saveState();
+        updateCurrency();
+        log(`Bought ${t.name} level ${t.level}.`);
+      }
+
+      // simple UI: draw tower info and let user click buttons area
+      canvas.addEventListener("click", onClick);
+
+      function onClick(e) {
+        const rect = canvas.getBoundingClientRect();
+        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+        const idx = Math.floor((y - 50) / 40);
+        if (idx >= 0 && idx < u.shardTowers.towers.length) buyTower(idx);
+      }
+
+      return {
+        update(dt) {
+          timer += dt;
+          if (timer > 1000) {
+            timer = 0;
+            let gainPerTick = 0;
+            u.shardTowers.towers.forEach(t => {
+              gainPerTick += t.level * t.gain;
+            });
+            u.shardTowers.shards += gainPerTick;
+            saveState();
+          }
+        },
+        render() {
+          ctx.fillStyle = "#050617";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.fillStyle = "#9aa0d2";
+          ctx.font = "12px system-ui";
+          ctx.fillText(`Shards: ${u.shardTowers.shards}`, 10, 20);
+          ctx.fillText("Click tower rows to buy levels.", 10, 36);
+
+          u.shardTowers.towers.forEach((t, i) => {
+            const y = 50 + i * 40;
+            const cost = Math.round(t.baseCost * Math.pow(1.6, t.level));
+            ctx.fillStyle = "#111325";
+            ctx.fillRect(10, y - 14, canvas.width - 20, 28);
+
+            ctx.fillStyle = "#f4f7ff";
+            ctx.fillText(`${t.name} (Lv ${t.level})`, 16, y - 2);
+            ctx.fillStyle = "#9aa0d2";
+            ctx.fillText(`Next cost: ${cost} credits · Gain: +${t.gain}/tick`, 16, y + 12);
+          });
+        }
+      };
     }
   </script>
 </body>
